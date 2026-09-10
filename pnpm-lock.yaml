@@ -11,7 +11,7 @@ importers:
   packages/components:
     dependencies:
       '@hebang/tokens':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tokens
     devDependencies:
       '@vitejs/plugin-vue':
@@ -42,15 +42,12 @@ importers:
   packages/theme:
     dependencies:
       '@hebang/tokens':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../tokens
       element-plus:
         specifier: '>=2.7.0'
         version: 2.14.5(vue@3.5.42(typescript@5.9.3))
     devDependencies:
-      sass:
-        specifier: ^1.83.0
-        version: 1.104.0
       typescript:
         specifier: ^5.7.2
         version: 5.9.3

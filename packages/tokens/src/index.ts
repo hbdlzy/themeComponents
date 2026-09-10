@@ -6,8 +6,10 @@ export {
   fontFamily,
   shadows,
   componentSizes,
+  cardHeaderHeights,
+  cardTitleFontSizes,
 } from './layout'
-export type { Spacing, Radii, FontSizes } from './layout'
+export type { Spacing, Radii, FontSizes, CardHeaderHeights, CardTitleFontSizes } from './layout'
 
 /* ── OKLCH 色彩派生引擎（《OKLCH 取色与应用规范》）── */
 export {
@@ -61,6 +63,8 @@ import {
   fontFamily,
   shadows,
   componentSizes,
+  cardHeaderHeights,
+  cardTitleFontSizes,
 } from './layout'
 
 /** 聚合后的布局类令牌（色彩请走 buildHbPalette 派生引擎） */
@@ -72,6 +76,8 @@ export const tokens = {
   fontFamily,
   shadows,
   componentSizes,
+  cardHeaderHeights,
+  cardTitleFontSizes,
 } as const
 
 export type Tokens = typeof tokens

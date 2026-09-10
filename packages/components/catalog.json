@@ -1,0 +1,233 @@
+{
+  "version": 1,
+  "updated": "2026-09-10",
+  "meta": {
+    "purpose": "给 AI / 开发者做「读设计稿 → 匹配现有组件」的唯一清单。新增组件只往 components 数组追加一条，不要改 Skill。",
+    "colorPolicy": {
+      "allowed": ["var(--hb-el-*)", "var(--hb-*)", "var(--el-*)"],
+      "forbidden": ["裸 hex", "rgb()", "hsl()", "named CSS color"],
+      "tokenTable": "packages/tokens/src/elTokens.ts",
+      "note": "设计稿上的 #FFFFFF / #1A1A1A 只用来识别角色，禁止写进组件。新角色先加 HB_EL_TOKENS，再被组件引用。"
+    },
+    "sizePolicy": {
+      "prefer": "先对 props 档位（size / titleSize 等）",
+      "mismatch": "结构仍是该组件时，只在实例上覆盖 sizeVars 里的 CSS 变量，禁止新开平行组件",
+      "newComponentWhen": "结构变了（缺一整块、多了一块、交互不同）才新增 HbXxx"
+    },
+    "addComponent": [
+      "src/components/HbXxx/HbXxx.vue + src/types.ts + src/index.ts 导出并加入 install 列表",
+      "样式只引用 var(--hb-el-*) / var(--hb-*) / var(--el-*)，尺寸用 layout token，对不上的暴露 CSS 变量",
+      "把下面 entryTemplate 填好，追加到本文件 components 数组末尾",
+      "playground/src/demos 补 HbXxxDemo.vue，并在 playground/src/demos/registry.ts 按 name 登记；pnpm build（playground 消费 dist）",
+      "不要改 .grok/skills/design-to-hebang/SKILL.md"
+    ],
+    "entryTemplate": {
+      "name": "HbXxx",
+      "file": "src/components/HbXxx/HbXxx.vue",
+      "match": ["设计里会出现的中文名", "英文名"],
+      "antiMatch": ["容易误判成它、其实不是它的东西"],
+      "summary": "一句话：什么时候用",
+      "props": {},
+      "slots": [],
+      "colorRoles": {},
+      "sizeScale": {},
+      "sizeVars": {},
+      "defaults": {}
+    }
+  },
+  "components": [
+    {
+      "name": "HbButton",
+      "file": "src/components/HbButton/HbButton.vue",
+      "match": ["按钮", "Button", "主按钮", "操作按钮"],
+      "antiMatch": ["文字链", "标签 Tag", "开关"],
+      "summary": "Element Plus 按钮封装，通栏 block + 令牌字重",
+      "props": {
+        "type": ["primary", "success", "warning", "danger", "info", "default"],
+        "size": ["small", "default", "large"],
+        "block": "boolean，通栏",
+        "loading": "boolean",
+        "disabled": "boolean"
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "主色/品牌按钮": "--hb-el-brand（经 --el-color-primary）",
+        "成功": "--hb-el-success",
+        "警告": "--hb-el-warning",
+        "危险": "--hb-el-danger",
+        "信息": "--hb-el-brand（info 由品牌代管）",
+        "悬停/点击": "--hb-el-brand_hover / --hb-el-brand_press（及对应功能色）"
+      },
+      "sizeScale": {
+        "size=small": "高 24px（--el-component-size-small）",
+        "size=default": "高 32px",
+        "size=large": "高 40px"
+      },
+      "sizeVars": {
+        "--el-component-size": "覆盖默认高度",
+        "--el-font-size-base": "覆盖字号"
+      },
+      "defaults": {
+        "type": "default",
+        "size": "default"
+      }
+    },
+    {
+      "name": "HbDialog",
+      "file": "src/components/HbDialog/HbDialog.vue",
+      "match": ["弹窗", "对话框", "Dialog", "Modal", "确认框"],
+      "antiMatch": ["抽屉 Drawer", "气泡 Popover", "全屏页"],
+      "summary": "ElDialog 封装，内置确认/取消 footer",
+      "props": {
+        "modelValue": "boolean",
+        "title": "string",
+        "width": "string | number，默认 520px",
+        "showFooter": "boolean",
+        "confirmText": "string",
+        "cancelText": "string",
+        "confirmLoading": "boolean"
+      },
+      "slots": ["default", "footer"],
+      "colorRoles": {
+        "标题文字": "--hb-el-text",
+        "内容文字": "--hb-el-text2",
+        "面板背景": "--hb-el-bg2（--el-bg-color-overlay）",
+        "遮罩": "--hb-el-mask",
+        "主按钮": "--hb-el-brand"
+      },
+      "sizeScale": {
+        "width": "默认 520px，按设计改 width prop"
+      },
+      "sizeVars": {
+        "--el-dialog-border-radius": "覆盖圆角"
+      },
+      "defaults": {
+        "width": "520px",
+        "showFooter": true
+      }
+    },
+    {
+      "name": "HbCard",
+      "file": "src/components/HbCard/HbCard.vue",
+      "match": ["卡片", "Card", "面板", "信息容器", "标题栏+内容区"],
+      "antiMatch": ["表格容器", "列表项", "统计数值块 Statistic"],
+      "summary": "大/中/小标题栏卡片；标题字号与图标跟随；操作区插槽；描边/投影/圆角可关",
+      "props": {
+        "title": "string",
+        "size": ["large", "medium", "small"],
+        "titleSize": [14, 16, 20, 24],
+        "showIcon": "boolean",
+        "bordered": "boolean",
+        "shadow": "boolean",
+        "round": "boolean",
+        "divided": "boolean",
+        "width": "string | number"
+      },
+      "slots": ["icon", "title", "header", "extra", "actions", "input", "icons", "text", "default"],
+      "colorRoles": {
+        "标题图标": "--hb-el-text（组件内 --hb-card-color-icon）",
+        "标题文本": "--hb-el-text（组件内 --hb-card-color-title）",
+        "正文/操作区文案": "--hb-el-text2（--hb-card-color-body / extra）",
+        "卡片分割线": "--hb-el-divider（--hb-card-color-divider）",
+        "卡片填充": "--hb-el-bg（--hb-card-color-bg）",
+        "卡片描边": "--hb-el-border（--hb-card-color-border）"
+      },
+      "sizeScale": {
+        "size=large": "标题栏 64px",
+        "size=medium": "标题栏 56px",
+        "size=small": "标题栏 48px",
+        "titleSize": "14 / 16 / 20 / 24，图标 1em 跟随"
+      },
+      "sizeVars": {
+        "--hb-card-header-height": "标题栏高度对不上档位时覆盖",
+        "--hb-card-title-size": "标题字号不在 14/16/20/24 时覆盖",
+        "--hb-card-radius": "圆角不是 8px 时覆盖",
+        "--hb-card-shadow": "投影不是规范值时覆盖",
+        "--hb-card-pad": "内边距",
+        "--hb-card-gap": "标题与图标间距",
+        "--hb-card-color-title": "覆盖标题色（默认 var(--hb-el-text)）",
+        "--hb-card-color-icon": "覆盖图标色（默认 var(--hb-el-text)）",
+        "--hb-card-color-body": "覆盖正文色（默认 var(--hb-el-text2)）",
+        "--hb-card-color-extra": "覆盖操作区文案色（默认 var(--hb-el-text2)）",
+        "--hb-card-color-bg": "覆盖填充（默认 var(--hb-el-bg)）",
+        "--hb-card-color-border": "覆盖描边（默认 var(--hb-el-border)）",
+        "--hb-card-color-divider": "覆盖分割线（默认 var(--hb-el-divider)）"
+      },
+      "defaults": {
+        "size": "medium",
+        "titleSize": 16,
+        "showIcon": true,
+        "bordered": true,
+        "shadow": true,
+        "round": true,
+        "divided": true
+      }
+    },
+    {
+      "name": "HbInput",
+      "file": "src/components/HbInput/HbInput.vue",
+      "match": ["输入框", "文本输入框", "Input", "表单输入", "单行输入"],
+      "antiMatch": ["多行文本框 Textarea", "数字输入框", "密码框", "搜索框组合", "选择器 Select"],
+      "summary": "单行文本输入：标题对齐、必填星号、清除、提示；默认/悬停/聚焦/错误/禁用/已填充",
+      "props": {
+        "modelValue": "string | number",
+        "label": "string，空则不渲染标题",
+        "labelAlign": ["left", "right", "center"],
+        "required": "boolean，标题前 * 走 --hb-el-danger",
+        "placeholder": "string",
+        "hint": "string",
+        "disabled": "boolean",
+        "status": ["default", "error"],
+        "size": ["small", "default", "large"],
+        "clearable": "boolean，默认 true，图标色不随状态变",
+        "width": "string | number，默认 240px",
+        "preview": ["hover", "focus"]
+      },
+      "slots": ["label", "hint", "hint-icon"],
+      "colorRoles": {
+        "标题图标/必填星号": "--hb-el-danger（各状态不变）",
+        "标题文本": "--hb-el-text（各状态不变）",
+        "输入框背景": "--hb-el-bg；禁用 --hb-el-bg3",
+        "输入框描边": "默认/已填充/禁用 --hb-el-border2；悬停 --hb-el-brand_hover；聚焦 --hb-el-brand_press；错误 --hb-el-danger",
+        "占位文本": "--hb-el-disabled",
+        "输入文本": "--hb-el-text",
+        "取消图标": "--hb-el-disabled（不随状态变）",
+        "提示图标/提示文本": "默认 --hb-el-disabled；错误 --hb-el-danger"
+      },
+      "sizeScale": {
+        "size=small": "高 24px，字 12px / 行高 20px",
+        "size=default": "高 32px，字 14px / 行高 22px，宽 240px",
+        "size=large": "高 40px，字 14px / 行高 24px",
+        "hint": "12px",
+        "clearIcon": "16×16px，右侧内边距随 pad-x"
+      },
+      "sizeVars": {
+        "--hb-input-height": "高度对不上档位时覆盖",
+        "--hb-input-font-size": "输入字号",
+        "--hb-input-line-height": "输入行高",
+        "--hb-input-label-size": "标题字号",
+        "--hb-input-hint-size": "提示字号",
+        "--hb-input-radius": "圆角（默认 4px）",
+        "--hb-input-pad-x": "左右内边距（默认 12px）",
+        "--hb-input-icon-size": "清除图标边长（默认 16px）",
+        "--hb-input-color-title-icon": "覆盖标题图标色",
+        "--hb-input-color-title": "覆盖标题文本色",
+        "--hb-input-color-bg": "覆盖输入框填充",
+        "--hb-input-color-border": "覆盖描边",
+        "--hb-input-color-placeholder": "覆盖占位色",
+        "--hb-input-color-text": "覆盖输入文本色",
+        "--hb-input-color-clear": "覆盖取消图标色",
+        "--hb-input-color-hint-icon": "覆盖提示图标色",
+        "--hb-input-color-hint": "覆盖提示文本色"
+      },
+      "defaults": {
+        "size": "default",
+        "labelAlign": "left",
+        "placeholder": "请输入",
+        "clearable": true,
+        "width": "240px",
+        "status": "default"
+      }
+    }
+  ]
+}
