@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { ElTransfer } from 'element-plus'
 import type { HbTransferProps } from '../../types'
+import { useControllable } from '../../utils'
 
 defineOptions({ name: 'HbTransfer' })
 
@@ -18,10 +18,10 @@ const emit = defineEmits<{
   (e: 'change', value: Array<string | number>, direction: string, movedKeys: Array<string | number>): void
 }>()
 
-const value = computed({
-  get: () => props.modelValue ?? [],
-  set: (next) => emit('update:modelValue', next),
-})
+const value = useControllable(
+  () => props.modelValue ?? [],
+  (next) => emit('update:modelValue', next),
+)
 </script>
 
 <template>

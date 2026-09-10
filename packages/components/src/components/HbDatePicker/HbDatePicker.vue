@@ -3,7 +3,7 @@ import { computed, useAttrs } from 'vue'
 import { ElDatePicker, ElTimePicker } from 'element-plus'
 import { componentSizes, radii } from '@hebang/tokens'
 import type { HbDatePickerProps, HbInputSize } from '../../types'
-import { toCssSize } from '../../utils'
+import { toCssSize, useControllable } from '../../utils'
 import HbField from '../HbField/HbField.vue'
 
 defineOptions({ name: 'HbDatePicker', inheritAttrs: false })
@@ -38,10 +38,10 @@ const resolvedSize = computed<HbInputSize>(() => {
   return size === 'small' || size === 'large' ? size : 'default'
 })
 
-const value = computed({
-  get: () => props.modelValue,
-  set: (next) => emit('update:modelValue', next),
-})
+const value = useControllable(
+  () => props.modelValue,
+  (next) => emit('update:modelValue', next),
+)
 
 const rootStyle = computed(() => {
   const size = resolvedSize.value

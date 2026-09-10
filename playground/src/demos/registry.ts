@@ -14,7 +14,7 @@ import HbThemeButtonDemo from './HbThemeButtonDemo.vue'
 import HbTransferDemo from './HbTransferDemo.vue'
 import HbUploadDemo from './HbUploadDemo.vue'
 
-/** 新增组件演示：在此登记 HbXxx → Demo，ComponentsDemo 会按 catalog 顺序出 tab */
+/** 新增组件演示：在此登记 HbXxx → Demo；各 Demo 页按 catalog 顺序取子集出 tab */
 export const componentDemos: Record<string, Component> = {
   HbButton: HbButtonDemo,
   HbThemeButton: HbThemeButtonDemo,
@@ -31,3 +31,20 @@ export const componentDemos: Record<string, Component> = {
   HbTransfer: HbTransferDemo,
   HbUpload: HbUploadDemo,
 }
+
+/** 表单页 tabs（catalog 顺序） */
+export const formDemoNames = [
+  'HbInput',
+  'HbTextarea',
+  'HbSelect',
+  'HbRadio',
+  'HbCheckbox',
+  'HbSlider',
+  'HbInputNumber',
+  'HbDatePicker',
+  'HbUpload',
+  'HbTransfer',
+] as const
+
+/** 已从「组件 Demo」拆到独立顶栏页的组件 */
+export const splitOutDemoNames = new Set<string>(['HbCard', 'HbThemeButton', ...formDemoNames])

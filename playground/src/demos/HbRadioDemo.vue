@@ -9,6 +9,8 @@ const options = [
 ]
 
 const live = ref('a')
+const aloneOff = ref<string | number | boolean>()
+const aloneOn = ref<string | number | boolean>('y')
 </script>
 
 <template>
@@ -20,8 +22,10 @@ const live = ref('a')
 
     <h3>单独</h3>
     <div class="row">
-      <HbRadio value="x">未选</HbRadio>
-      <HbRadioGroup model-value="y">
+      <HbRadioGroup v-model="aloneOff">
+        <HbRadio value="x">未选</HbRadio>
+      </HbRadioGroup>
+      <HbRadioGroup v-model="aloneOn">
         <HbRadio value="y">已选</HbRadio>
       </HbRadioGroup>
       <HbRadio value="z" disabled>禁用</HbRadio>

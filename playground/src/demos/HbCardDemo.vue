@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { HbButton, HbCard } from '@hebang/components'
+import { HbButton, HbCard, HbInput, HbSelect } from '@hebang/components'
 import type { HbCardSize, HbCardTitleSize } from '@hebang/components'
 
 const sizes: { value: HbCardSize; label: string }[] = [
@@ -9,6 +9,14 @@ const sizes: { value: HbCardSize; label: string }[] = [
   { value: 'large', label: '大卡片' },
 ]
 const titleSizes: HbCardTitleSize[] = [14, 16, 20, 24]
+const extraKinds = [
+  { value: 'none', label: '无操作区' },
+  { value: 'actions', label: '按钮组' },
+  { value: 'input', label: '输入框' },
+  { value: 'icons', label: '图标组' },
+  { value: 'text', label: '文案' },
+] as const
+type ExtraKind = (typeof extraKinds)[number]['value']
 
 const liveSize = ref<HbCardSize>('medium')
 const liveTitleSize = ref<HbCardTitleSize>(16)
@@ -17,23 +25,25 @@ const liveBordered = ref(true)
 const liveShadow = ref(true)
 const liveRound = ref(true)
 const liveDivided = ref(true)
-const extraKind = ref<'none' | 'actions' | 'input' | 'icons' | 'text'>('none')
-const actionCount = ref(2)
+const extraKind = ref<ExtraKind>('actions')
+const extraCount = ref(2)
+const keyword = ref('')
+const picked = ref<string | number | undefined>(undefined)
 
-const extraLabel = computed(() => {
-  switch (extraKind.value) {
-    case 'actions':
-      return '按钮组'
-    case 'input':
-      return '输入框'
-    case 'icons':
-      return '图标组'
-    case 'text':
-      return '文案'
-    default:
-      return '无'
-  }
-})
+const selectOptions = [
+  { label: '选项一', value: 'a' },
+  { label: '选项二', value: 'b' },
+  { label: '选项三', value: 'c' },
+]
+const textSamples = ['辅助文案', '共 12 条', '已选 3 项', '刚刚更新']
+
+const extraLabel = computed(
+  () => extraKinds.find((item) => item.value === extraKind.value)?.label ?? '无操作区',
+)
+const showCount = computed(
+  () => extraKind.value === 'actions' || extraKind.value === 'icons' || extraKind.value === 'text',
+)
+const previewTexts = computed(() => textSamples.slice(0, extraCount.value))
 </script>
 
 <template>
@@ -42,7 +52,7 @@ const extraLabel = computed(() => {
     <p class="muted">
       卡片容器分为大、中、小三种，标题栏高度分别为 64px、56px、48px；
       每种卡片标题都有 14 / 16 / 20 / 24 四个字号。标题前图标可显隐，尺寸跟随文字；
-      标题栏后端可切换按钮组、输入框、图标组、文案；面板描边 / 投影 / 圆角可开关。
+      标题栏右侧操作区五种：无操作区、按钮组、输入框、图标组、文案；面板描边 / 投影 / 圆角可开关。
       颜色走
       <code>--hb-el-text</code>（标题/图标）、
       <code>--hb-el-divider</code>（分割线）、
@@ -79,13 +89,11 @@ const extraLabel = computed(() => {
         <el-radio-button :value="24">24</el-radio-button>
       </el-radio-group>
       <el-radio-group v-model="extraKind" size="small">
-        <el-radio-button value="none">无操作区</el-radio-button>
-        <el-radio-button value="actions">按钮组</el-radio-button>
-        <el-radio-button value="input">输入框</el-radio-button>
-        <el-radio-button value="icons">图标组</el-radio-button>
-        <el-radio-button value="text">文案</el-radio-button>
+        <el-radio-button v-for="item in extraKinds" :key="item.value" :value="item.value">
+          {{ item.label }}
+        </el-radio-button>
       </el-radio-group>
-      <el-radio-group v-if="extraKind === 'actions'" v-model="actionCount" size="small">
+      <el-radio-group v-if="showCount" v-model="extraCount" size="small">
         <el-radio-button :value="1">1</el-radio-button>
         <el-radio-button :value="2">2</el-radio-button>
         <el-radio-button :value="3">3</el-radio-button>
@@ -101,7 +109,9 @@ const extraLabel = computed(() => {
     <div class="live">
       <HbCard class="live__kit" title="操作区配套组件">
         <div class="kit">
-          <div class="kit__col">
+          <p v-if="extraKind === 'none'" class="kit__empty">无操作区。标题栏右侧留空，只保留标题和图标。</p>
+
+          <div v-else-if="extraKind === 'actions'" class="kit__col">
             <HbButton type="primary" size="small">按钮</HbButton>
             <div class="kit__row">
               <HbButton type="primary" size="small">按钮</HbButton>
@@ -119,21 +129,39 @@ const extraLabel = computed(() => {
               <HbButton type="primary" size="small">按钮</HbButton>
             </div>
           </div>
-          <div class="kit__col kit__col--icons">
-            <span class="kit-ico" />
+
+          <div v-else-if="extraKind === 'input'" class="kit__col kit__col--fields">
+            <HbInput v-model="keyword" size="small" placeholder="请输入" :width="160" />
+            <HbSelect v-model="picked" size="small" placeholder="请选择" :width="120" :options="selectOptions" />
+            <div class="kit__row">
+              <HbInput size="small" placeholder="请输入" :width="160" />
+              <HbSelect size="small" placeholder="请选择" :width="120" :options="selectOptions" />
+            </div>
+          </div>
+
+          <div v-else-if="extraKind === 'icons'" class="kit__col kit__col--icons">
+            <span class="kit-ico" aria-hidden="true" />
             <div class="kit__row"><span class="kit-ico" /><span class="kit-ico" /></div>
             <div class="kit__row"><span class="kit-ico" /><span class="kit-ico" /><span class="kit-ico" /></div>
             <div class="kit__row">
               <span class="kit-ico" /><span class="kit-ico" /><span class="kit-ico" /><span class="kit-ico" />
             </div>
           </div>
-          <div class="kit__col kit__col--fields">
-            <el-input placeholder="请输入" size="small" style="width: 160px">
-              <template #suffix>
-                <span class="search-mark">⌕</span>
-              </template>
-            </el-input>
-            <el-select placeholder="请选择" size="small" style="width: 120px" />
+
+          <div v-else class="kit__col kit__col--text">
+            <span class="extra-text">{{ textSamples[0] }}</span>
+            <div class="kit__row">
+              <span class="extra-text">{{ textSamples[0] }}</span>
+              <span class="extra-text">{{ textSamples[1] }}</span>
+            </div>
+            <div class="kit__row">
+              <span class="extra-text">{{ textSamples[0] }}</span>
+              <span class="extra-text">{{ textSamples[1] }}</span>
+              <span class="extra-text">{{ textSamples[2] }}</span>
+            </div>
+            <div class="kit__row">
+              <span class="extra-text" v-for="item in textSamples" :key="item">{{ item }}</span>
+            </div>
           </div>
         </div>
       </HbCard>
@@ -150,17 +178,17 @@ const extraLabel = computed(() => {
         :divided="liveDivided"
       >
         <template v-if="extraKind === 'actions'" #actions>
-          <HbButton v-for="n in actionCount" :key="n" type="primary" size="small">按钮</HbButton>
+          <HbButton v-for="n in extraCount" :key="n" type="primary" size="small">按钮</HbButton>
         </template>
         <template v-else-if="extraKind === 'input'" #input>
-          <el-input placeholder="请输入" size="small" style="width: 140px" />
-          <el-select placeholder="请选择" size="small" style="width: 110px" />
+          <HbInput v-model="keyword" size="small" placeholder="请输入" :width="140" />
+          <HbSelect v-model="picked" size="small" placeholder="请选择" :width="110" :options="selectOptions" />
         </template>
         <template v-else-if="extraKind === 'icons'" #icons>
-          <span class="kit-ico" /><span class="kit-ico" /><span class="kit-ico" />
+          <span v-for="n in extraCount" :key="n" class="kit-ico" />
         </template>
         <template v-else-if="extraKind === 'text'" #text>
-          <span class="extra-text">辅助文案</span>
+          <span v-for="item in previewTexts" :key="item" class="extra-text">{{ item }}</span>
         </template>
         <p class="live__body">
           {{ liveSize === 'small' ? '小' : liveSize === 'large' ? '大' : '中' }}卡片 ·
@@ -206,7 +234,6 @@ const extraLabel = computed(() => {
     justify-content: center;
     color: var(--hb-el-brand);
     font-size: 13px;
-    writing-mode: horizontal-tb;
   }
 
   &__card :deep(.hb-card__body) {
@@ -236,6 +263,13 @@ const extraLabel = computed(() => {
     min-height: 88px;
   }
 
+  &__preview :deep(.hb-card__extra) {
+    .hb-input,
+    .hb-select {
+      min-width: 0;
+    }
+  }
+
   &__body {
     margin: 0;
     color: var(--hb-el-text2);
@@ -250,6 +284,15 @@ const extraLabel = computed(() => {
   padding: 8px;
   border: 1px dashed color-mix(in srgb, var(--hb-el-brand) 45%, transparent);
   border-radius: 6px;
+  min-height: 120px;
+
+  &__empty {
+    margin: 0;
+    padding: 16px 8px;
+    color: var(--hb-el-text3);
+    font-size: 13px;
+    line-height: 1.6;
+  }
 
   &__col {
     display: flex;
@@ -270,9 +313,11 @@ const extraLabel = computed(() => {
   }
 
   &__col--fields {
-    flex-direction: row;
-    align-items: flex-start;
-    padding-top: 2px;
+    gap: 12px;
+  }
+
+  &__col--text .extra-text {
+    padding: 2px 0;
   }
 }
 
@@ -295,11 +340,6 @@ const extraLabel = computed(() => {
   white-space: nowrap;
 }
 
-.search-mark {
-  color: var(--hb-el-text3);
-  font-size: 14px;
-}
-
 .switch {
   display: inline-flex;
   align-items: center;
@@ -311,7 +351,6 @@ const extraLabel = computed(() => {
 @media (max-width: 960px) {
   .matrix {
     grid-template-columns: 48px 1fr;
-    grid-auto-flow: row;
   }
 
   .live {

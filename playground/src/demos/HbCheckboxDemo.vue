@@ -9,6 +9,8 @@ const options = [
 ]
 
 const live = ref(['a'])
+const aloneOff = ref<Array<string | number>>([])
+const aloneOn = ref<Array<string | number>>(['a'])
 </script>
 
 <template>
@@ -20,10 +22,10 @@ const live = ref(['a'])
 
     <h3>单独</h3>
     <div class="row">
-      <HbCheckboxGroup :model-value="[]">
+      <HbCheckboxGroup v-model="aloneOff">
         <HbCheckbox value="off">未选</HbCheckbox>
       </HbCheckboxGroup>
-      <HbCheckboxGroup v-model="live">
+      <HbCheckboxGroup v-model="aloneOn">
         <HbCheckbox value="a">已选</HbCheckbox>
       </HbCheckboxGroup>
       <HbCheckbox value="x" disabled>禁用</HbCheckbox>

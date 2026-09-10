@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { ElCheckboxGroup } from 'element-plus'
 import type { HbCheckboxGroupProps } from '../../types'
+import { useControllable } from '../../utils'
 import HbCheckbox from './HbCheckbox.vue'
 
 defineOptions({ name: 'HbCheckboxGroup' })
@@ -17,10 +17,10 @@ const emit = defineEmits<{
   (e: 'change', value: Array<string | number>): void
 }>()
 
-const value = computed({
-  get: () => props.modelValue ?? [],
-  set: (next) => emit('update:modelValue', next),
-})
+const value = useControllable(
+  () => props.modelValue ?? [],
+  (next) => emit('update:modelValue', next),
+)
 </script>
 
 <template>

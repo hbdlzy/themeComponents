@@ -3,7 +3,7 @@ import { computed, useAttrs } from 'vue'
 import { ElInput } from 'element-plus'
 import { componentSizes, fontSizes, radii, spacing } from '@hebang/tokens'
 import type { HbInputProps, HbInputSize } from '../../types'
-import { toCssSize } from '../../utils'
+import { toCssSize, useControllable } from '../../utils'
 import HbField from '../HbField/HbField.vue'
 
 defineOptions({ name: 'HbInput', inheritAttrs: false })
@@ -42,10 +42,10 @@ const resolvedSize = computed<HbInputSize>(() => {
 const isPassword = computed(() => props.type === 'password')
 const isError = computed(() => props.status === 'error')
 
-const value = computed({
-  get: () => (props.modelValue == null ? '' : String(props.modelValue)),
-  set: (next) => emit('update:modelValue', next),
-})
+const value = useControllable(
+  () => (props.modelValue == null ? '' : String(props.modelValue)),
+  (next) => emit('update:modelValue', next),
+)
 
 const rootClass = computed(() => ({
   'hb-input--small': resolvedSize.value === 'small',

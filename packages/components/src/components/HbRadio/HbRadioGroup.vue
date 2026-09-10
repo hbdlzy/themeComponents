@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import { ElRadioGroup } from 'element-plus'
 import type { HbRadioGroupProps } from '../../types'
+import { useControllable } from '../../utils'
 import HbRadio from './HbRadio.vue'
 
 defineOptions({ name: 'HbRadioGroup' })
@@ -16,10 +16,10 @@ const emit = defineEmits<{
   (e: 'change', value: HbRadioGroupProps['modelValue']): void
 }>()
 
-const value = computed({
-  get: () => props.modelValue,
-  set: (next) => emit('update:modelValue', next),
-})
+const value = useControllable(
+  () => props.modelValue,
+  (next) => emit('update:modelValue', next),
+)
 </script>
 
 <template>

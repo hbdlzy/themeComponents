@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { ElSlider } from 'element-plus'
 import type { HbSliderProps } from '../../types'
-import { toCssSize } from '../../utils'
+import { toCssSize, useControllable } from '../../utils'
 
 defineOptions({ name: 'HbSlider' })
 
@@ -21,10 +21,10 @@ const emit = defineEmits<{
   (e: 'change', value: number | [number, number]): void
 }>()
 
-const value = computed({
-  get: () => props.modelValue ?? (props.range ? [props.min, props.max] : props.min),
-  set: (next) => emit('update:modelValue', next),
-})
+const value = useControllable<number | [number, number]>(
+  () => props.modelValue ?? (props.range ? [props.min, props.max] : props.min),
+  (next) => emit('update:modelValue', next),
+)
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {}

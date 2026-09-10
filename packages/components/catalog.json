@@ -2,7 +2,7 @@
   "version": 1,
   "updated": "2026-09-10",
   "meta": {
-    "purpose": "给 AI / 开发者做「读设计稿 → 匹配现有组件」的唯一清单。新增组件只往 components 数组追加一条，不要改 Skill。",
+    "purpose": "给 AI / 开发者做「读设计稿 → 匹配现有组件」的唯一清单。新增组件只往 components 数组追加一条，不要改 Skill。每条 usage 是最短可运行模板：从 @hebang/ui 具名导入，并 import '@hebang/ui/style'；值一律 v-model。",
     "colorPolicy": {
       "allowed": ["var(--hb-el-*)", "var(--hb-*)", "var(--el-*)"],
       "forbidden": ["裸 hex", "rgb()", "hsl()", "named CSS color"],
@@ -27,6 +27,7 @@
       "match": ["设计里会出现的中文名", "英文名"],
       "antiMatch": ["容易误判成它、其实不是它的东西"],
       "summary": "一句话：什么时候用",
+      "usage": "<HbXxx v-model=\"value\" />",
       "props": {},
       "slots": [],
       "colorRoles": {},
@@ -42,6 +43,7 @@
       "match": ["按钮", "Button", "主按钮", "操作按钮"],
       "antiMatch": ["文字链", "标签 Tag", "开关"],
       "summary": "Element Plus 按钮封装，通栏 block + 令牌字重",
+      "usage": "<HbButton type=\"primary\" size=\"default\">按钮</HbButton>",
       "props": {
         "type": ["primary", "success", "warning", "danger", "info", "default"],
         "size": ["small", "default", "large"],
@@ -78,6 +80,7 @@
       "match": ["弹窗", "对话框", "Dialog", "Modal", "确认框"],
       "antiMatch": ["抽屉 Drawer", "气泡 Popover", "全屏页"],
       "summary": "ElDialog 封装，内置确认/取消 footer",
+      "usage": "<HbDialog v-model=\"open\" title=\"标题\">内容</HbDialog>",
       "props": {
         "modelValue": "boolean",
         "title": "string",
@@ -112,6 +115,7 @@
       "match": ["卡片", "Card", "面板", "信息容器", "标题栏+内容区"],
       "antiMatch": ["表格容器", "列表项", "统计数值块 Statistic"],
       "summary": "大/中/小标题栏卡片；标题字号与图标跟随；操作区插槽；描边/投影/圆角可关",
+      "usage": "<HbCard title=\"卡片名称\" size=\"medium\" :title-size=\"16\">内容<template #actions><HbThemeButton size=\"small\">按钮</HbThemeButton></template></HbCard>\n操作区四选一：#actions 按钮组 / #input 输入框 / #icons 图标组 / #text 文案；无操作区不写这些插槽。",
       "props": {
         "title": "string",
         "size": ["large", "medium", "small"],
@@ -169,6 +173,7 @@
       "match": ["输入框", "文本输入框", "Input", "表单输入", "单行输入", "密码框", "Password"],
       "antiMatch": ["多行文本框 Textarea", "数字输入框", "搜索框组合", "选择器 Select"],
       "summary": "单行文本/密码输入：标题对齐、必填星号、清除、提示；默认/悬停/聚焦/错误/禁用/已填充",
+      "usage": "<HbInput v-model=\"keyword\" label=\"标题文案：\" placeholder=\"请输入\" />\n密码：<HbInput v-model=\"password\" type=\"password\" label=\"密码：\" placeholder=\"请输入密码\" />",
       "props": {
         "modelValue": "string | number",
         "label": "string，空则不渲染标题",
@@ -239,6 +244,7 @@
       "match": ["多行文本框", "文本域", "Textarea", "多行输入"],
       "antiMatch": ["单行输入框", "富文本编辑器"],
       "summary": "多行文本：标题/必填/提示与输入框相同；最小高 64px、默认 4 行、聚焦/错误描边 2px",
+      "usage": "<HbTextarea v-model=\"content\" label=\"标题文案：\" placeholder=\"请输入\" :rows=\"4\" />",
       "props": {
         "modelValue": "string",
         "label": "string",
@@ -289,6 +295,7 @@
       "match": ["下拉框", "下拉选择", "Select", "选择器"],
       "antiMatch": ["级联 Cascader", "树选择", "日期选择"],
       "summary": "下拉选择：触发器同输入框色角色；面板选项悬停 brand_hover+白字，选中 brand_press+白字",
+      "usage": "options: [{ label: '选项一', value: 'a' }, { label: '选项二', value: 'b' }]\n<HbSelect v-model=\"picked\" label=\"标题文案：\" :options=\"options\" placeholder=\"请选择\" />\n多选加 multiple，v-model 为数组。",
       "props": {
         "modelValue": "string | number | boolean | array",
         "options": "HbSelectOption[]",
@@ -340,6 +347,7 @@
       "match": ["单选", "单选框", "Radio"],
       "antiMatch": ["复选框", "开关 Switch", "单选按钮组 RadioButton"],
       "summary": "单选：图标 16px、内点 8px；默认描边 disabled，悬停 brand_hover，选中 brand_press；成组用 HbRadioGroup",
+      "usage": "options: [{ label: '选项一', value: 'a' }, { label: '选项二', value: 'b' }]\n<HbRadioGroup v-model=\"picked\" :options=\"options\" />\n或：<HbRadioGroup v-model=\"picked\"><HbRadio value=\"a\">选项一</HbRadio><HbRadio value=\"b\">选项二</HbRadio></HbRadioGroup>\n单独 HbRadio 必须包在 Group 里，值绑在 Group 的 v-model 上。",
       "props": {
         "value": "string | number | boolean",
         "disabled": "boolean",
@@ -370,6 +378,7 @@
       "match": ["复选", "复选框", "Checkbox", "多选框"],
       "antiMatch": ["单选框", "开关 Switch"],
       "summary": "复选：图标 16px；默认描边 disabled，悬停 brand_hover，选中 brand_press；成组用 HbCheckboxGroup",
+      "usage": "options: [{ label: '选项一', value: 'a' }, { label: '选项二', value: 'b' }]\n<HbCheckboxGroup v-model=\"picked\" :options=\"options\" />\nv-model 为数组。单独 HbCheckbox 必须包在 Group 里。",
       "props": {
         "value": "string | number | boolean",
         "disabled": "boolean",
@@ -401,6 +410,7 @@
       "match": ["滑块", "Slider", "区间滑块"],
       "antiMatch": ["进度条 Progress", "数字输入框"],
       "summary": "滑块：轨道 4px、手柄 16px（悬停 20px）；未激活 bg4，激活 brand，聚焦 brand_press",
+      "usage": "<HbSlider v-model=\"n\" />\n区间：<HbSlider v-model=\"range\" range />，range 时 v-model 为 [number, number]。",
       "props": {
         "modelValue": "number | [number, number]",
         "min": "number",
@@ -442,6 +452,7 @@
       "match": ["数字输入框", "步进器", "InputNumber", "计数器"],
       "antiMatch": ["滑块 Slider", "单行文本输入"],
       "summary": "数字步进：默认 32×120；描边同输入框，聚焦描边/增减图标 brand_press",
+      "usage": "<HbInputNumber v-model=\"count\" label=\"数量：\" :min=\"0\" :max=\"99\" />",
       "props": {
         "modelValue": "number",
         "min": "number",
@@ -484,6 +495,7 @@
       "match": ["日期选择", "时间选择", "DatePicker", "TimePicker", "日期时间"],
       "antiMatch": ["日历全页 Calendar", "时间轴 Timeline"],
       "summary": "日期/时间选择：触发器同输入框；选中格 brand_press+白字，悬停描边 brand_hover",
+      "usage": "<HbDatePicker v-model=\"date\" label=\"选择日期：\" />\n范围：<HbDatePicker v-model=\"span\" type=\"daterange\" width=\"320px\" />\n时间：type=\"time\"；日期时间：type=\"datetime\"。",
       "props": {
         "modelValue": "string | number | Date | array",
         "type": ["date", "daterange", "datetime", "datetimerange", "time"],
@@ -530,6 +542,7 @@
       "match": ["上传", "Upload", "文件上传", "拖拽上传"],
       "antiMatch": ["图片裁剪", "附件列表独立组件"],
       "summary": "文件上传：按钮 108×32 或拖拽 400×200；进度 bg4/brand，失败 danger",
+      "usage": "<HbUpload>\n  <template #tip>支持任意文件</template>\n</HbUpload>\n拖拽：<HbUpload mode=\"drag\" />",
       "props": {
         "mode": ["button", "drag"],
         "disabled": "boolean",
@@ -565,6 +578,7 @@
       "match": ["穿梭框", "Transfer", "穿梭", "左右选择"],
       "antiMatch": ["树穿梭", "表格穿梭"],
       "summary": "穿梭框：列表 240×320；选项悬停 brand_hover+白字，选中/按下箭头 brand_press+白字",
+      "usage": "data: [{ key: 1, label: '选项 1' }, { key: 2, label: '选项 2' }]\n<HbTransfer v-model=\"chosen\" :data=\"data\" />\nv-model 为选中项 key 的数组。",
       "props": {
         "modelValue": "Array<string | number>",
         "data": "HbTransferItem[]",
@@ -603,6 +617,7 @@
       "match": ["主题按钮", "ThemeButton", "合邦按钮", "主要按钮", "次要实线", "次要虚线", "中性按钮"],
       "antiMatch": ["ElButton 封装", "文字链", "开关"],
       "summary": "原生 button 主题按钮：5 类型 × 3 尺寸 × 圆角；颜色全部取 --hb-el-*，不包装 ElButton",
+      "usage": "<HbThemeButton variant=\"primary\" size=\"medium\">按钮</HbThemeButton>\n合邦设计稿上的按钮优先用这个，不要用 HbButton（那是 ElButton 封装）。",
       "props": {
         "variant": ["primary", "secondary", "secondary-dashed", "neutral", "neutral-dashed"],
         "size": ["large", "medium", "small"],

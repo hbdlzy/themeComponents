@@ -18,10 +18,12 @@
       }
     },
     "./style": "./dist/index.css",
+    "./catalog.json": "./catalog.json",
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "catalog.json"
   ],
   "engines": {
     "node": ">=18"

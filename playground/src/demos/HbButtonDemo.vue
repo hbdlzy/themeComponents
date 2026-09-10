@@ -14,9 +14,6 @@ function onLoadingClick(): void {
 
 <template>
   <div class="demo">
-    <p class="muted">
-      颜色走主题 <code>--hb-el-brand</code> 及功能色；尺寸对应 EP small / default / large。
-    </p>
     <h3>类型</h3>
     <div class="row">
       <HbButton type="primary">主要</HbButton>
@@ -25,6 +22,15 @@ function onLoadingClick(): void {
       <HbButton type="danger">危险</HbButton>
       <HbButton type="info">信息</HbButton>
       <HbButton>默认</HbButton>
+    </div>
+    <h3>类型 × 禁用</h3>
+    <div class="row">
+      <HbButton type="primary" disabled>主要</HbButton>
+      <HbButton type="success" disabled>成功</HbButton>
+      <HbButton type="warning" disabled>警告</HbButton>
+      <HbButton type="danger" disabled>危险</HbButton>
+      <HbButton type="info" disabled>信息</HbButton>
+      <HbButton disabled>默认</HbButton>
     </div>
     <h3>尺寸</h3>
     <div class="row">

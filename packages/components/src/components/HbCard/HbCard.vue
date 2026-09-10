@@ -204,10 +204,18 @@ const rootStyle = computed(() => {
   &__extra {
     display: inline-flex;
     align-items: center;
+    justify-content: flex-end;
     gap: var(--hb-card-gap);
     flex: none;
+    flex-shrink: 0;
     min-width: 0;
+    max-width: 62%;
     color: var(--hb-card-color-extra);
+
+    > * {
+      flex: none;
+      min-width: 0;
+    }
   }
 
   &__body {

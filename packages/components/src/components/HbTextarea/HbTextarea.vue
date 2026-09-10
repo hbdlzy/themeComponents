@@ -3,7 +3,7 @@ import { computed, useAttrs } from 'vue'
 import { ElInput } from 'element-plus'
 import { fontSizes, radii, spacing } from '@hebang/tokens'
 import type { HbTextareaProps } from '../../types'
-import { toCssSize } from '../../utils'
+import { toCssSize, useControllable } from '../../utils'
 import HbField from '../HbField/HbField.vue'
 
 defineOptions({ name: 'HbTextarea', inheritAttrs: false })
@@ -31,10 +31,10 @@ const emit = defineEmits<{
 
 const attrs = useAttrs()
 const isError = computed(() => props.status === 'error')
-const value = computed({
-  get: () => props.modelValue ?? '',
-  set: (next) => emit('update:modelValue', next),
-})
+const value = useControllable(
+  () => props.modelValue ?? '',
+  (next) => emit('update:modelValue', next),
+)
 
 const rootStyle = computed(() => {
   const style: Record<string, string> = {
