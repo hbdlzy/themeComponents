@@ -1,0 +1,11 @@
+// 组件库全局样式：品牌语义变量统一从 --el-* 取值，
+// 具体色值由 @hebang/theme 决定，组件层不硬编码颜色。
+:root {
+  --hb-brand-color: var(--el-color-primary);
+  --hb-brand-color-light: var(--el-color-primary-light-9);
+  --hb-text-color: var(--el-text-color-primary);
+  --hb-text-color-secondary: var(--el-text-color-secondary);
+  --hb-border-color: var(--el-border-color);
+  --hb-border-radius: var(--el-border-radius-base);
+  --hb-bg-color-page: var(--el-bg-color-page);
+}

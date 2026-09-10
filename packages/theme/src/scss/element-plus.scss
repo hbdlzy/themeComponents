@@ -1,0 +1,48 @@
+@use "sass:map";
+@use "variables" as *;
+
+// 进阶用法（可选）：走 Element Plus 官方 SCSS 变量链路，重新编译整套 theme-chalk。
+// 适合需要把主色混入组件内部硬编码色值（如 disabled、badge）的场景。
+//
+// 消费方入口写法：
+//   @use "@hebang/theme/scss/element-plus" as hb;
+//   @forward "element-plus/theme-chalk/src/index.scss" as *;
+// 然后以 SCSS 方式引入该入口，由业务工程自行编译（需安装 sass）。
+// 编译前必须用本文件覆盖 EP 的 $colors 等 !default 变量。
+
+$colors: () !default;
+$colors: map.deep-merge(
+  (
+    "white": #ffffff,
+    "primary": (
+      "base": $hb-color-primary,
+      "light-3": $hb-color-primary-light-3,
+      "light-5": $hb-color-primary-light-5,
+      "light-7": $hb-color-primary-light-7,
+      "light-8": $hb-color-primary-light-8,
+      "light-9": $hb-color-primary-light-9,
+      "dark-2": $hb-color-primary-dark-2,
+    ),
+    "success": (
+      "base": $hb-color-success,
+    ),
+    "warning": (
+      "base": $hb-color-warning,
+    ),
+    "danger": (
+      "base": $hb-color-danger,
+    ),
+    "error": (
+      "base": $hb-color-danger,
+    ),
+    "info": (
+      "base": $hb-color-info,
+    ),
+  ),
+  $colors
+);
+
+// EP SCSS 链路常用变量导出，供业务方 @use 后传给 theme-chalk
+@function hb-colors() {
+  @return $colors;
+}
