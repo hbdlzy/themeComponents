@@ -166,9 +166,9 @@
     {
       "name": "HbInput",
       "file": "src/components/HbInput/HbInput.vue",
-      "match": ["输入框", "文本输入框", "Input", "表单输入", "单行输入"],
-      "antiMatch": ["多行文本框 Textarea", "数字输入框", "密码框", "搜索框组合", "选择器 Select"],
-      "summary": "单行文本输入：标题对齐、必填星号、清除、提示；默认/悬停/聚焦/错误/禁用/已填充",
+      "match": ["输入框", "文本输入框", "Input", "表单输入", "单行输入", "密码框", "Password"],
+      "antiMatch": ["多行文本框 Textarea", "数字输入框", "搜索框组合", "选择器 Select"],
+      "summary": "单行文本/密码输入：标题对齐、必填星号、清除、提示；默认/悬停/聚焦/错误/禁用/已填充",
       "props": {
         "modelValue": "string | number",
         "label": "string，空则不渲染标题",
@@ -179,7 +179,9 @@
         "disabled": "boolean",
         "status": ["default", "error"],
         "size": ["small", "default", "large"],
-        "clearable": "boolean，默认 true，图标色不随状态变",
+        "type": ["text", "password"],
+        "clearable": "boolean，默认 true，图标色不随状态变；密码框不展示清除",
+        "showPassword": "boolean，type=password 时默认 true",
         "width": "string | number，默认 240px",
         "preview": ["hover", "focus"]
       },
@@ -224,9 +226,375 @@
         "size": "default",
         "labelAlign": "left",
         "placeholder": "请输入",
+        "type": "text",
         "clearable": true,
+        "showPassword": true,
         "width": "240px",
         "status": "default"
+      }
+    },
+    {
+      "name": "HbTextarea",
+      "file": "src/components/HbTextarea/HbTextarea.vue",
+      "match": ["多行文本框", "文本域", "Textarea", "多行输入"],
+      "antiMatch": ["单行输入框", "富文本编辑器"],
+      "summary": "多行文本：标题/必填/提示与输入框相同；最小高 64px、默认 4 行、聚焦/错误描边 2px",
+      "props": {
+        "modelValue": "string",
+        "label": "string",
+        "labelAlign": ["left", "right", "center"],
+        "required": "boolean",
+        "placeholder": "string",
+        "hint": "string",
+        "disabled": "boolean",
+        "status": ["default", "error"],
+        "rows": "number，默认 4",
+        "autosize": "boolean | { minRows, maxRows }",
+        "maxlength": "number",
+        "showWordLimit": "boolean",
+        "width": "string | number，默认 100%"
+      },
+      "slots": ["label", "hint", "hint-icon"],
+      "colorRoles": {
+        "标题图标/必填星号": "--hb-el-danger",
+        "标题文本": "--hb-el-text",
+        "背景": "--hb-el-bg；禁用 --hb-el-bg3",
+        "描边": "默认 --hb-el-border2；悬停 --hb-el-brand_hover；聚焦 --hb-el-brand_press；错误 --hb-el-danger",
+        "占位": "--hb-el-disabled",
+        "输入文本": "--hb-el-text",
+        "提示": "默认 --hb-el-disabled；错误 --hb-el-danger"
+      },
+      "sizeScale": {
+        "minHeight": "64px",
+        "rows": "默认 4",
+        "pad": "12×8px",
+        "focusBorder": "聚焦/错误 2px"
+      },
+      "sizeVars": {
+        "--hb-textarea-min-height": "最小高度",
+        "--hb-textarea-font-size": "字号",
+        "--hb-textarea-radius": "圆角",
+        "--hb-textarea-pad-x": "左右内边距",
+        "--hb-textarea-pad-y": "上下内边距"
+      },
+      "defaults": {
+        "rows": 4,
+        "width": "100%",
+        "placeholder": "请输入"
+      }
+    },
+    {
+      "name": "HbSelect",
+      "file": "src/components/HbSelect/HbSelect.vue",
+      "match": ["下拉框", "下拉选择", "Select", "选择器"],
+      "antiMatch": ["级联 Cascader", "树选择", "日期选择"],
+      "summary": "下拉选择：触发器同输入框色角色；面板选项悬停 brand_hover+白字，选中 brand_press+白字",
+      "props": {
+        "modelValue": "string | number | boolean | array",
+        "options": "HbSelectOption[]",
+        "label": "string",
+        "placeholder": "string",
+        "size": ["small", "default", "large"],
+        "multiple": "boolean",
+        "filterable": "boolean",
+        "clearable": "boolean",
+        "disabled": "boolean",
+        "status": ["default", "error"],
+        "width": "string | number，默认 240px"
+      },
+      "slots": ["default", "label", "hint", "hint-icon"],
+      "colorRoles": {
+        "触发器背景": "--hb-el-bg；禁用 --hb-el-bg3",
+        "触发器描边": "默认 --hb-el-border2；悬停 --hb-el-brand_hover；聚焦 --hb-el-brand_press；错误 --hb-el-danger",
+        "占位/下拉图标": "--hb-el-disabled",
+        "多选标签已填充": "背景 --hb-el-bg4，文本 --hb-el-text",
+        "多选标签悬停": "背景 --hb-el-brand_hover，文本 --hb-el-white",
+        "多选标签聚焦": "背景 --hb-el-brand_press，文本 --hb-el-white",
+        "面板背景/描边": "--hb-el-bg / --hb-el-border2",
+        "选项默认文本": "--hb-el-text",
+        "选项悬停": "背景 --hb-el-brand_hover，文本 --hb-el-white",
+        "选项选中": "背景 --hb-el-brand_press，文本 --hb-el-white",
+        "选项禁用": "背景 --hb-el-bg3，文本 --hb-el-disabled"
+      },
+      "sizeScale": {
+        "size=default": "高 32px，宽 240px",
+        "option": "高 32px",
+        "panelMaxHeight": "256px"
+      },
+      "sizeVars": {
+        "--hb-select-height": "触发器高度",
+        "--hb-select-radius": "圆角",
+        "--hb-select-panel-max": "面板最大高度",
+        "--hb-select-option-height": "选项高度"
+      },
+      "defaults": {
+        "size": "default",
+        "placeholder": "请选择",
+        "clearable": true,
+        "width": "240px"
+      }
+    },
+    {
+      "name": "HbRadio",
+      "file": "src/components/HbRadio/HbRadio.vue",
+      "match": ["单选", "单选框", "Radio"],
+      "antiMatch": ["复选框", "开关 Switch", "单选按钮组 RadioButton"],
+      "summary": "单选：图标 16px、内点 8px；默认描边 disabled，悬停 brand_hover，选中 brand_press；成组用 HbRadioGroup",
+      "props": {
+        "value": "string | number | boolean",
+        "disabled": "boolean",
+        "size": ["small", "default", "large"]
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "选项文本": "--hb-el-text；禁用 --hb-el-disabled",
+        "图标默认": "--hb-el-disabled",
+        "图标悬停": "--hb-el-brand_hover",
+        "图标选中/聚焦": "--hb-el-brand_press",
+        "图标禁用/已选中失效": "--hb-el-disabled",
+        "选中内点": "--hb-el-white"
+      },
+      "sizeScale": {
+        "icon": "16px",
+        "inner": "8px",
+        "labelGap": "8px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "disabled": false
+      }
+    },
+    {
+      "name": "HbCheckbox",
+      "file": "src/components/HbCheckbox/HbCheckbox.vue",
+      "match": ["复选", "复选框", "Checkbox", "多选框"],
+      "antiMatch": ["单选框", "开关 Switch"],
+      "summary": "复选：图标 16px；默认描边 disabled，悬停 brand_hover，选中 brand_press；成组用 HbCheckboxGroup",
+      "props": {
+        "value": "string | number | boolean",
+        "disabled": "boolean",
+        "indeterminate": "boolean",
+        "size": ["small", "default", "large"]
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "选项文本": "--hb-el-text；禁用 --hb-el-disabled",
+        "图标默认": "--hb-el-disabled",
+        "图标悬停": "--hb-el-brand_hover",
+        "图标选中/聚焦": "--hb-el-brand_press",
+        "勾选图标": "--hb-el-white",
+        "图标禁用/已选中失效": "--hb-el-disabled"
+      },
+      "sizeScale": {
+        "icon": "16px",
+        "check": "12px",
+        "labelGap": "8px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "disabled": false
+      }
+    },
+    {
+      "name": "HbSlider",
+      "file": "src/components/HbSlider/HbSlider.vue",
+      "match": ["滑块", "Slider", "区间滑块"],
+      "antiMatch": ["进度条 Progress", "数字输入框"],
+      "summary": "滑块：轨道 4px、手柄 16px（悬停 20px）；未激活 bg4，激活 brand，聚焦 brand_press",
+      "props": {
+        "modelValue": "number | [number, number]",
+        "min": "number",
+        "max": "number",
+        "step": "number",
+        "range": "boolean",
+        "disabled": "boolean",
+        "showStops": "boolean",
+        "width": "string | number，默认 240px"
+      },
+      "slots": [],
+      "colorRoles": {
+        "轨道未激活": "--hb-el-bg4",
+        "轨道已激活": "--hb-el-brand；聚焦 --hb-el-brand_press；禁用 --hb-el-disabled",
+        "手柄填充": "--hb-el-bg；禁用 --hb-el-bg3",
+        "手柄描边": "--hb-el-brand；聚焦 --hb-el-brand_press；禁用 --hb-el-border2",
+        "刻度": "--hb-el-border2",
+        "当前数值": "--hb-el-text"
+      },
+      "sizeScale": {
+        "track": "高 4px",
+        "handle": "16px，悬停 20px",
+        "width": "默认 240px"
+      },
+      "sizeVars": {
+        "--el-slider-height": "轨道高度",
+        "--el-slider-button-size": "手柄边长"
+      },
+      "defaults": {
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "width": "240px"
+      }
+    },
+    {
+      "name": "HbInputNumber",
+      "file": "src/components/HbInputNumber/HbInputNumber.vue",
+      "match": ["数字输入框", "步进器", "InputNumber", "计数器"],
+      "antiMatch": ["滑块 Slider", "单行文本输入"],
+      "summary": "数字步进：默认 32×120；描边同输入框，聚焦描边/增减图标 brand_press",
+      "props": {
+        "modelValue": "number",
+        "min": "number",
+        "max": "number",
+        "step": "number",
+        "size": ["small", "default", "large"],
+        "placeholder": "string",
+        "disabled": "boolean",
+        "status": ["default", "error"],
+        "label": "string",
+        "width": "string | number，默认 120px"
+      },
+      "slots": ["label", "hint", "hint-icon"],
+      "colorRoles": {
+        "背景": "--hb-el-bg；禁用 --hb-el-bg3",
+        "描边": "默认 --hb-el-border2；悬停 --hb-el-brand_hover；聚焦 --hb-el-brand_press；错误 --hb-el-danger",
+        "占位/增减图标默认": "--hb-el-disabled",
+        "聚焦增减图标": "--hb-el-brand_press",
+        "输入文本": "--hb-el-text；禁用 --hb-el-disabled",
+        "分割线": "--hb-el-divider"
+      },
+      "sizeScale": {
+        "size=default": "高 32px，宽 120px",
+        "stepper": "高 32px"
+      },
+      "sizeVars": {
+        "--hb-input-number-height": "高度",
+        "--hb-input-number-radius": "圆角"
+      },
+      "defaults": {
+        "size": "default",
+        "step": 1,
+        "width": "120px",
+        "placeholder": "请输入"
+      }
+    },
+    {
+      "name": "HbDatePicker",
+      "file": "src/components/HbDatePicker/HbDatePicker.vue",
+      "match": ["日期选择", "时间选择", "DatePicker", "TimePicker", "日期时间"],
+      "antiMatch": ["日历全页 Calendar", "时间轴 Timeline"],
+      "summary": "日期/时间选择：触发器同输入框；选中格 brand_press+白字，悬停描边 brand_hover",
+      "props": {
+        "modelValue": "string | number | Date | array",
+        "type": ["date", "daterange", "datetime", "datetimerange", "time"],
+        "placeholder": "string",
+        "startPlaceholder": "string",
+        "endPlaceholder": "string",
+        "size": ["small", "default", "large"],
+        "clearable": "boolean",
+        "disabled": "boolean",
+        "status": ["default", "error"],
+        "width": "string | number，默认 240px"
+      },
+      "slots": ["label", "hint", "hint-icon"],
+      "colorRoles": {
+        "触发器": "同 HbInput：bg / border2 / brand_hover / brand_press / danger / bg3",
+        "面板背景/描边": "--hb-el-bg / --hb-el-border2",
+        "标题/当月日期/星期": "--hb-el-text",
+        "其他月/占位": "--hb-el-disabled",
+        "箭头默认": "--hb-el-disabled；悬停 --hb-el-brand_hover；聚焦 --hb-el-brand_press",
+        "日期悬停描边": "--hb-el-brand_hover",
+        "日期选中": "背景 --hb-el-brand_press，文本 --hb-el-white",
+        "范围区间": "--hb-el-brand_hover",
+        "底部文字按钮": "--hb-el-brand / hover / press"
+      },
+      "sizeScale": {
+        "trigger": "高 32px，宽 240px",
+        "panel": "约 240px",
+        "cell": "32×32px"
+      },
+      "sizeVars": {
+        "--hb-date-height": "触发器高度",
+        "--hb-date-radius": "圆角"
+      },
+      "defaults": {
+        "type": "date",
+        "placeholder": "选择日期",
+        "clearable": true,
+        "width": "240px"
+      }
+    },
+    {
+      "name": "HbUpload",
+      "file": "src/components/HbUpload/HbUpload.vue",
+      "match": ["上传", "Upload", "文件上传", "拖拽上传"],
+      "antiMatch": ["图片裁剪", "附件列表独立组件"],
+      "summary": "文件上传：按钮 108×32 或拖拽 400×200；进度 bg4/brand，失败 danger",
+      "props": {
+        "mode": ["button", "drag"],
+        "disabled": "boolean",
+        "limit": "number",
+        "accept": "string",
+        "dragText": "string",
+        "buttonText": "string"
+      },
+      "slots": ["tip"],
+      "colorRoles": {
+        "提示": "--hb-el-disabled",
+        "附件图标": "--hb-el-brand",
+        "附件名称": "--hb-el-text",
+        "刷新/关闭图标": "--hb-el-disabled",
+        "进度背景": "--hb-el-bg4",
+        "进度当前": "--hb-el-brand；失败 --hb-el-danger",
+        "拖拽区背景/描边": "--hb-el-bg / dashed --hb-el-border2；悬停 --hb-el-brand；禁用 --hb-el-bg3"
+      },
+      "sizeScale": {
+        "button": "108×32px",
+        "drag": "400×200px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "mode": "button",
+        "buttonText": "点击上传",
+        "dragText": "点击或拖拽文件到这里上传"
+      }
+    },
+    {
+      "name": "HbTransfer",
+      "file": "src/components/HbTransfer/HbTransfer.vue",
+      "match": ["穿梭框", "Transfer", "穿梭", "左右选择"],
+      "antiMatch": ["树穿梭", "表格穿梭"],
+      "summary": "穿梭框：列表 240×320；选项悬停 brand_hover+白字，选中/按下箭头 brand_press+白字",
+      "props": {
+        "modelValue": "Array<string | number>",
+        "data": "HbTransferItem[]",
+        "titles": "[string, string]",
+        "filterable": "boolean",
+        "disabled": "boolean"
+      },
+      "slots": [],
+      "colorRoles": {
+        "列表背景/描边": "--hb-el-bg / --hb-el-border2",
+        "标题文本": "--hb-el-text",
+        "条数副文本": "--hb-el-disabled",
+        "分割线": "--hb-el-divider",
+        "搜索框": "背景 --hb-el-bg；描边默认 --hb-el-border2，悬停 --hb-el-brand_hover，聚焦 --hb-el-brand_press；禁用 --hb-el-bg3",
+        "选项默认": "背景 --hb-el-bg，文本 --hb-el-text",
+        "选项悬停": "背景 --hb-el-brand_hover，文本 --hb-el-white",
+        "选项选中": "背景 --hb-el-brand_press，文本 --hb-el-white",
+        "选项禁用": "背景 --hb-el-bg3，文本 --hb-el-disabled",
+        "箭头默认": "背景 --hb-el-bg，描边 --hb-el-border2，图标 --hb-el-disabled",
+        "箭头悬停描边": "--hb-el-brand_hover",
+        "箭头按下": "背景/描边 --hb-el-brand_press，图标 --hb-el-white",
+        "箭头禁用": "背景 --hb-el-bg3，描边 --hb-el-border2，图标 --hb-el-disabled"
+      },
+      "sizeScale": {
+        "panel": "240×320px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "titles": ["源列表", "目标列表"],
+        "filterable": true
       }
     }
   ]

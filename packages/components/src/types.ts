@@ -101,12 +101,12 @@ export interface HbTextareaProps extends HbFieldChrome {
 
 export interface HbSelectOption {
   label: string
-  value: string | number | boolean
+  value: string | number
   disabled?: boolean
 }
 
 export interface HbSelectProps extends HbFieldChrome {
-  modelValue?: string | number | boolean | Array<string | number | boolean>
+  modelValue?: string | number | Array<string | number>
   options?: HbSelectOption[]
   placeholder?: string
   size?: HbInputSize
@@ -135,7 +135,7 @@ export interface HbCheckboxProps {
 }
 
 export interface HbCheckboxGroupProps {
-  modelValue?: Array<string | number | boolean>
+  modelValue?: Array<string | number>
   disabled?: boolean
   options?: HbSelectOption[]
 }
@@ -168,7 +168,7 @@ export type HbDatePickerType =
   | 'time'
 
 export interface HbDatePickerProps extends HbFieldChrome {
-  modelValue?: string | number | Date | Array<string | number | Date>
+  modelValue?: string | number | Date | string[] | number[] | Date[] | null
   type?: HbDatePickerType
   placeholder?: string
   startPlaceholder?: string

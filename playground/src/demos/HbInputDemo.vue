@@ -108,6 +108,12 @@ const liveClearable = ref(true)
       />
     </div>
 
+    <h3>密码</h3>
+    <div class="row">
+      <HbInput type="password" label="密码：" required placeholder="请输入密码" />
+      <HbInput type="password" disabled model-value="hidden" placeholder="请输入密码" />
+    </div>
+
     <h3>实时</h3>
     <div class="live__controls">
       <el-radio-group v-model="liveSize" size="small">
@@ -173,6 +179,13 @@ const liveClearable = ref(true)
   color: var(--hb-el-text);
   font-size: 13px;
   line-height: 22px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: start;
 }
 
 .live__controls {

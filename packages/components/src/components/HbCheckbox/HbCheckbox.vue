@@ -24,10 +24,10 @@ withDefaults(defineProps<HbCheckboxProps>(), {
 
 <style lang="scss">
 .hb-checkbox.el-checkbox {
-  --el-checkbox-input-border: 1px solid var(--hb-el-border2, var(--el-border-color));
+  --el-checkbox-input-border: 1px solid var(--hb-el-disabled, var(--el-text-color-disabled));
   --el-checkbox-bg-color: var(--hb-el-bg, var(--el-bg-color-page));
-  --el-checkbox-checked-bg-color: var(--hb-el-brand, var(--el-color-primary));
-  --el-checkbox-checked-input-border-color: var(--hb-el-brand, var(--el-color-primary));
+  --el-checkbox-checked-bg-color: var(--hb-el-brand_press, var(--el-color-primary-dark-2));
+  --el-checkbox-checked-input-border-color: var(--hb-el-brand_press, var(--el-color-primary-dark-2));
   --el-checkbox-checked-icon-color: var(--hb-el-white, var(--el-color-white));
   height: auto;
   color: var(--hb-el-text, var(--el-text-color-primary));
@@ -36,6 +36,7 @@ withDefaults(defineProps<HbCheckboxProps>(), {
   .el-checkbox__inner {
     width: 16px;
     height: 16px;
+    background: var(--hb-el-bg, var(--el-bg-color-page));
   }
 
   .el-checkbox__label {
@@ -44,9 +45,23 @@ withDefaults(defineProps<HbCheckboxProps>(), {
     font-size: 14px;
   }
 
+  &:hover:not(.is-disabled):not(.is-checked) .el-checkbox__inner {
+    border-color: var(--hb-el-brand_hover, var(--el-color-primary));
+  }
+
   &.is-disabled {
     .el-checkbox__label {
       color: var(--hb-el-disabled, var(--el-text-color-disabled));
+    }
+
+    .el-checkbox__inner {
+      border-color: var(--hb-el-disabled, var(--el-text-color-disabled));
+      background: var(--hb-el-bg, var(--el-bg-color-page));
+    }
+
+    &.is-checked .el-checkbox__inner {
+      background: var(--hb-el-disabled, var(--el-text-color-disabled));
+      border-color: var(--hb-el-disabled, var(--el-text-color-disabled));
     }
   }
 }

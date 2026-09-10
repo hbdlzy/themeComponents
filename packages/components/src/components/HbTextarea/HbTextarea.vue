@@ -104,7 +104,7 @@ const rootStyle = computed(() => {
     }
     &:focus-within {
       --hb-textarea-border-width: 2px;
-      --hb-textarea-color-border: var(--hb-el-brand, var(--el-color-primary));
+      --hb-textarea-color-border: var(--hb-el-brand_press, var(--el-color-primary-dark-2));
     }
   }
 

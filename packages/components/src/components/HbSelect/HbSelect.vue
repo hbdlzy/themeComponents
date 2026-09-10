@@ -9,6 +9,7 @@ import HbField from '../HbField/HbField.vue'
 defineOptions({ name: 'HbSelect', inheritAttrs: false })
 
 const props = withDefaults(defineProps<HbSelectProps>(), {
+  modelValue: undefined,
   label: '',
   labelAlign: 'left',
   required: false,
@@ -82,6 +83,7 @@ const rootStyle = computed(() => {
       v-model="value"
       class="hb-select__control"
       v-bind="attrs"
+      popper-class="hb-select-dropdown"
       :size="resolvedSize"
       :disabled="disabled"
       :placeholder="placeholder"
@@ -136,6 +138,34 @@ const rootStyle = computed(() => {
     --hb-select-color-bg: var(--hb-el-bg3, var(--el-fill-color));
   }
 
+  .el-tag {
+    background: var(--hb-el-bg4, var(--el-fill-color-light));
+    color: var(--hb-el-text, var(--el-text-color-primary));
+    border-color: transparent;
+  }
+
+  .el-tag .el-tag__close {
+    color: var(--hb-el-disabled, var(--el-text-color-disabled));
+  }
+
+  &:not(.hb-select--disabled):not(.hb-select--error):hover .el-tag,
+  &:not(.hb-select--disabled):not(.hb-select--error):hover .el-tag .el-tag__close {
+    background: var(--hb-el-brand_hover, var(--el-color-primary));
+    color: var(--hb-el-white, var(--el-color-white));
+  }
+
+  &:not(.hb-select--disabled):not(.hb-select--error):focus-within .el-tag,
+  &:not(.hb-select--disabled):not(.hb-select--error):focus-within .el-tag .el-tag__close {
+    background: var(--hb-el-brand_press, var(--el-color-primary-dark-2));
+    color: var(--hb-el-white, var(--el-color-white));
+  }
+
+  &--disabled .el-tag {
+    background: var(--hb-el-bg3, var(--el-fill-color));
+    color: var(--hb-el-disabled, var(--el-text-color-disabled));
+    box-shadow: 0 0 0 1px var(--hb-el-border2, var(--el-border-color)) inset;
+  }
+
   &__control {
     width: 100%;
 
@@ -152,22 +182,36 @@ const rootStyle = computed(() => {
   }
 }
 
-.el-select-dropdown {
+.hb-select-dropdown {
+  background: var(--hb-el-bg, var(--el-bg-color-page));
+  border-color: var(--hb-el-border2, var(--el-border-color));
+
+  .el-select-dropdown__list {
+    max-height: 256px;
+  }
+
   .el-select-dropdown__item {
     height: 32px;
     line-height: 32px;
     font-size: 14px;
     color: var(--hb-el-text, var(--el-text-color-primary));
+    background: var(--hb-el-bg, var(--el-bg-color-page));
   }
 
   .el-select-dropdown__item.is-hovering {
-    background: var(--hb-el-bg3, var(--el-fill-color));
+    background: var(--hb-el-brand_hover, var(--el-color-primary));
+    color: var(--hb-el-white, var(--el-color-white));
   }
 
   .el-select-dropdown__item.is-selected {
-    color: var(--hb-el-brand, var(--el-color-primary));
-    background: color-mix(in srgb, var(--hb-el-brand, var(--el-color-primary)) 8%, transparent);
+    background: var(--hb-el-brand_press, var(--el-color-primary-dark-2));
+    color: var(--hb-el-white, var(--el-color-white));
     font-weight: 500;
+  }
+
+  .el-select-dropdown__item.is-disabled {
+    background: var(--hb-el-bg3, var(--el-fill-color));
+    color: var(--hb-el-disabled, var(--el-text-color-disabled));
   }
 }
 </style>

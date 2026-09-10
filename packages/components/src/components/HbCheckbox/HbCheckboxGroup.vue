@@ -13,8 +13,8 @@ const props = withDefaults(defineProps<HbCheckboxGroupProps>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Array<string | number | boolean>): void
-  (e: 'change', value: Array<string | number | boolean>): void
+  (e: 'update:modelValue', value: Array<string | number>): void
+  (e: 'change', value: Array<string | number>): void
 }>()
 
 const value = computed({
@@ -28,7 +28,7 @@ const value = computed({
     v-model="value"
     class="hb-checkbox-group"
     :disabled="disabled"
-    @change="emit('change', $event as Array<string | number | boolean>)"
+    @change="emit('change', $event as Array<string | number>)"
   >
     <slot>
       <HbCheckbox
