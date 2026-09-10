@@ -62,26 +62,142 @@ export type HbInputLabelAlign = 'left' | 'right' | 'center'
 
 export type HbInputStatus = 'default' | 'error'
 
+export type HbInputType = 'text' | 'password'
+
 /** 演示用：把 :hover / :focus-within 冻成静态态 */
 export type HbInputPreview = 'hover' | 'focus'
 
-export interface HbInputProps {
-  modelValue?: string | number
-  /** 标题文案；空则不渲染标题行 */
+export interface HbFieldChrome {
   label?: string
   labelAlign?: HbInputLabelAlign
-  /** 标题前必填星号，颜色 --hb-el-danger */
   required?: boolean
-  placeholder?: string
   hint?: string
   disabled?: boolean
-  /** error 时描边/提示走 --hb-el-danger */
   status?: HbInputStatus
+  width?: string | number
+}
+
+export interface HbInputProps extends HbFieldChrome {
+  modelValue?: string | number
+  placeholder?: string
   size?: HbInputSize
+  type?: HbInputType
   /** 是否展示取消图标（设计默认常显，色不随状态变） */
   clearable?: boolean
-  /** 默认 240px，可改成百分比如 100% */
-  width?: string | number
+  /** 密码框明文切换，type=password 时默认 true */
+  showPassword?: boolean
   /** 仅 playground 状态墙：强制悬停/聚焦描边 */
   preview?: HbInputPreview
+}
+
+export interface HbTextareaProps extends HbFieldChrome {
+  modelValue?: string
+  placeholder?: string
+  rows?: number
+  autosize?: boolean | { minRows?: number; maxRows?: number }
+  maxlength?: number
+  showWordLimit?: boolean
+}
+
+export interface HbSelectOption {
+  label: string
+  value: string | number | boolean
+  disabled?: boolean
+}
+
+export interface HbSelectProps extends HbFieldChrome {
+  modelValue?: string | number | boolean | Array<string | number | boolean>
+  options?: HbSelectOption[]
+  placeholder?: string
+  size?: HbInputSize
+  multiple?: boolean
+  filterable?: boolean
+  clearable?: boolean
+}
+
+export interface HbRadioProps {
+  value?: string | number | boolean
+  disabled?: boolean
+  size?: HbInputSize
+}
+
+export interface HbRadioGroupProps {
+  modelValue?: string | number | boolean
+  disabled?: boolean
+  options?: HbSelectOption[]
+}
+
+export interface HbCheckboxProps {
+  value?: string | number | boolean
+  disabled?: boolean
+  size?: HbInputSize
+  indeterminate?: boolean
+}
+
+export interface HbCheckboxGroupProps {
+  modelValue?: Array<string | number | boolean>
+  disabled?: boolean
+  options?: HbSelectOption[]
+}
+
+export interface HbSliderProps {
+  modelValue?: number | [number, number]
+  min?: number
+  max?: number
+  step?: number
+  range?: boolean
+  disabled?: boolean
+  showStops?: boolean
+  width?: string | number
+}
+
+export interface HbInputNumberProps extends HbFieldChrome {
+  modelValue?: number
+  min?: number
+  max?: number
+  step?: number
+  size?: HbInputSize
+  placeholder?: string
+}
+
+export type HbDatePickerType =
+  | 'date'
+  | 'daterange'
+  | 'datetime'
+  | 'datetimerange'
+  | 'time'
+
+export interface HbDatePickerProps extends HbFieldChrome {
+  modelValue?: string | number | Date | Array<string | number | Date>
+  type?: HbDatePickerType
+  placeholder?: string
+  startPlaceholder?: string
+  endPlaceholder?: string
+  size?: HbInputSize
+  clearable?: boolean
+}
+
+export type HbUploadMode = 'button' | 'drag'
+
+export interface HbUploadProps {
+  mode?: HbUploadMode
+  disabled?: boolean
+  limit?: number
+  accept?: string
+  dragText?: string
+  buttonText?: string
+}
+
+export interface HbTransferItem {
+  key: string | number
+  label: string
+  disabled?: boolean
+}
+
+export interface HbTransferProps {
+  modelValue?: Array<string | number>
+  data?: HbTransferItem[]
+  titles?: [string, string]
+  filterable?: boolean
+  disabled?: boolean
 }

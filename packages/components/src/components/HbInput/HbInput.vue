@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, useAttrs, useSlots } from 'vue'
+import { computed, useAttrs } from 'vue'
 import { ElInput } from 'element-plus'
 import { componentSizes, fontSizes, radii, spacing } from '@hebang/tokens'
-import type { HbInputLabelAlign, HbInputProps, HbInputSize } from '../../types'
+import type { HbInputProps, HbInputSize } from '../../types'
+import { toCssSize } from '../../utils'
+import HbField from '../HbField/HbField.vue'
 
 defineOptions({ name: 'HbInput', inheritAttrs: false })
 
@@ -16,7 +18,9 @@ const props = withDefaults(defineProps<HbInputProps>(), {
   disabled: false,
   status: 'default',
   size: 'default',
+  type: 'text',
   clearable: true,
+  showPassword: true,
   width: '240px',
 })
 
@@ -29,21 +33,14 @@ const emit = defineEmits<{
 }>()
 
 const attrs = useAttrs()
-const slots = useSlots()
 
 const resolvedSize = computed<HbInputSize>(() => {
   const size = props.size
   return size === 'small' || size === 'large' ? size : 'default'
 })
 
-const resolvedAlign = computed<HbInputLabelAlign>(() => {
-  const align = props.labelAlign
-  return align === 'right' || align === 'center' ? align : 'left'
-})
-
+const isPassword = computed(() => props.type === 'password')
 const isError = computed(() => props.status === 'error')
-const hasLabel = computed(() => !!(props.label || slots.label))
-const hasHint = computed(() => !!(props.hint || slots.hint))
 
 const value = computed({
   get: () => (props.modelValue == null ? '' : String(props.modelValue)),
@@ -57,7 +54,7 @@ const rootClass = computed(() => ({
   'hb-input--disabled': props.disabled,
   'hb-input--hover': props.preview === 'hover',
   'hb-input--focus': props.preview === 'focus',
-  [`hb-input--label-${resolvedAlign.value}`]: true,
+  'hb-input--password': isPassword.value,
 }))
 
 const rootStyle = computed(() => {
@@ -71,17 +68,12 @@ const rootStyle = computed(() => {
           : componentSizes.heightBase,
     '--hb-input-font-size': size === 'small' ? fontSizes.extraSmall : fontSizes.base,
     '--hb-input-line-height': size === 'small' ? '20px' : size === 'large' ? '24px' : '22px',
-    '--hb-input-label-size': size === 'large' ? fontSizes.base : fontSizes.extraSmall,
-    '--hb-input-hint-size': fontSizes.extraSmall,
     '--hb-input-radius': radii.base,
     '--hb-input-pad-x': size === 'small' ? spacing.sm : size === 'large' ? spacing.md : '12px',
     '--hb-input-icon-size': '16px',
-    '--hb-input-label-gap': spacing.sm,
-    '--hb-input-hint-gap': spacing.xs,
   }
-  if (props.width != null && props.width !== '') {
-    style.width = typeof props.width === 'number' ? `${props.width}px` : String(props.width)
-  }
+  const width = toCssSize(props.width)
+  if (width) style.width = width
   return style
 })
 
@@ -95,29 +87,36 @@ function onClear(event: MouseEvent): void {
 </script>
 
 <template>
-  <div class="hb-input" :class="rootClass" :style="rootStyle">
-    <div v-if="hasLabel" class="hb-input__label">
-      <span class="hb-input__label-inner">
-        <span v-if="required" class="hb-input__required" aria-hidden="true">*</span>
-        <span class="hb-input__label-text">
-          <slot name="label">{{ label }}</slot>
-        </span>
-      </span>
-    </div>
+  <HbField
+    class="hb-input"
+    :class="rootClass"
+    :style="rootStyle"
+    :label="label"
+    :label-align="labelAlign"
+    :required="required"
+    :hint="hint"
+    :status="status"
+    :disabled="disabled"
+  >
+    <template v-if="$slots.label" #label><slot name="label" /></template>
+    <template v-if="$slots.hint" #hint><slot name="hint" /></template>
+    <template v-if="$slots['hint-icon']" #hint-icon><slot name="hint-icon" /></template>
 
     <ElInput
       v-model="value"
       class="hb-input__control"
       v-bind="attrs"
+      :type="isPassword ? 'password' : 'text'"
       :size="resolvedSize"
       :disabled="disabled"
       :placeholder="placeholder"
       :clearable="false"
+      :show-password="isPassword && showPassword"
       @focus="emit('focus', $event)"
       @blur="emit('blur', $event)"
       @change="emit('change', String($event ?? ''))"
     >
-      <template v-if="clearable" #suffix>
+      <template v-if="clearable && !isPassword" #suffix>
         <button
           class="hb-input__clear"
           type="button"
@@ -138,39 +137,15 @@ function onClear(event: MouseEvent): void {
         </button>
       </template>
     </ElInput>
-
-    <div v-if="hasHint" class="hb-input__hint">
-      <span class="hb-input__hint-icon" aria-hidden="true">
-        <slot name="hint-icon">
-          <svg v-if="isError" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.2" />
-            <path d="M8 4.6v4.2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-            <circle cx="8" cy="11.2" r="0.9" fill="currentColor" />
-          </svg>
-          <svg v-else viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.2" />
-            <circle cx="8" cy="5.1" r="0.85" fill="currentColor" />
-            <path d="M8 7.2v4.3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
-          </svg>
-        </slot>
-      </span>
-      <span class="hb-input__hint-text">
-        <slot name="hint">{{ hint }}</slot>
-      </span>
-    </div>
-  </div>
+  </HbField>
 </template>
 
 <style lang="scss">
 .hb-input {
-  --hb-input-color-title-icon: var(--hb-el-danger, var(--el-color-danger));
-  --hb-input-color-title: var(--hb-el-text, var(--el-text-color-primary));
   --hb-input-color-bg: var(--hb-el-bg, var(--el-bg-color-page));
   --hb-input-color-border: var(--hb-el-border2, var(--el-border-color));
   --hb-input-color-placeholder: var(--hb-el-disabled, var(--el-text-color-disabled));
   --hb-input-color-clear: var(--hb-el-disabled, var(--el-text-color-disabled));
-  --hb-input-color-hint-icon: var(--hb-el-disabled, var(--el-text-color-disabled));
-  --hb-input-color-hint: var(--hb-el-disabled, var(--el-text-color-disabled));
   --hb-input-color-text: var(--hb-el-text, var(--el-text-color-primary));
 
   --el-input-bg-color: var(--hb-input-color-bg);
@@ -184,12 +159,7 @@ function onClear(event: MouseEvent): void {
   --el-disabled-text-color: var(--hb-input-color-placeholder);
   --el-input-height: var(--hb-input-height);
   --el-input-border-radius: var(--hb-input-radius);
-
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  min-width: 0;
-  box-sizing: border-box;
+  --el-input-icon-color: var(--hb-input-color-clear);
 
   &:not(.hb-input--disabled):not(.hb-input--error) {
     &:hover,
@@ -205,48 +175,11 @@ function onClear(event: MouseEvent): void {
 
   &--error {
     --hb-input-color-border: var(--hb-el-danger, var(--el-color-danger));
-    --hb-input-color-hint-icon: var(--hb-el-danger, var(--el-color-danger));
-    --hb-input-color-hint: var(--hb-el-danger, var(--el-color-danger));
   }
 
   &--disabled {
     --hb-input-color-bg: var(--hb-el-bg3, var(--el-fill-color));
     --hb-input-color-border: var(--hb-el-border2, var(--el-border-color));
-  }
-
-  &__label {
-    margin-bottom: var(--hb-input-label-gap);
-    font-size: var(--hb-input-label-size);
-    line-height: 1.4;
-    color: var(--hb-input-color-title);
-    text-align: left;
-  }
-
-  &--label-right &__label {
-    text-align: right;
-  }
-
-  &--label-center &__label {
-    text-align: center;
-  }
-
-  &__label-inner {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    max-width: 100%;
-  }
-
-  &__required {
-    flex: none;
-    color: var(--hb-input-color-title-icon);
-    font-family: inherit;
-    line-height: 1;
-  }
-
-  &__label-text {
-    min-width: 0;
-    color: var(--hb-input-color-title);
   }
 
   &__control {
@@ -274,6 +207,15 @@ function onClear(event: MouseEvent): void {
     &.is-disabled .el-input__wrapper {
       cursor: not-allowed;
     }
+
+    .el-input__clear,
+    .el-input__password {
+      color: var(--hb-input-color-clear);
+    }
+
+    .el-input__password:hover {
+      color: var(--hb-el-brand, var(--el-color-primary));
+    }
   }
 
   &__clear {
@@ -297,36 +239,6 @@ function onClear(event: MouseEvent): void {
     &:disabled {
       cursor: not-allowed;
     }
-  }
-
-  &__hint {
-    display: flex;
-    align-items: flex-start;
-    gap: 4px;
-    margin-top: var(--hb-input-hint-gap);
-    font-size: var(--hb-input-hint-size);
-    line-height: 1.4;
-    color: var(--hb-input-color-hint);
-  }
-
-  &__hint-icon {
-    display: inline-flex;
-    flex: none;
-    width: 1em;
-    height: 1em;
-    margin-top: 0.15em;
-    color: var(--hb-input-color-hint-icon);
-
-    svg {
-      width: 1em;
-      height: 1em;
-      display: block;
-    }
-  }
-
-  &__hint-text {
-    min-width: 0;
-    color: var(--hb-input-color-hint);
   }
 }
 </style>
