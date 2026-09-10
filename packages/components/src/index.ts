@@ -15,6 +15,7 @@ import HbRadioGroup from './components/HbRadio/HbRadioGroup.vue'
 import HbSelect from './components/HbSelect/HbSelect.vue'
 import HbSlider from './components/HbSlider/HbSlider.vue'
 import HbTextarea from './components/HbTextarea/HbTextarea.vue'
+import HbThemeButton from './components/HbThemeButton/HbThemeButton.vue'
 import HbTransfer from './components/HbTransfer/HbTransfer.vue'
 import HbUpload from './components/HbUpload/HbUpload.vue'
 
@@ -32,6 +33,7 @@ export {
   HbSelect,
   HbSlider,
   HbTextarea,
+  HbThemeButton,
   HbTransfer,
   HbUpload,
 }
@@ -59,6 +61,10 @@ export type {
   HbSelectProps,
   HbSliderProps,
   HbTextareaProps,
+  HbThemeButtonProps,
+  HbThemeButtonVariant,
+  HbThemeButtonSize,
+  HbThemeButtonShape,
   HbTransferItem,
   HbTransferProps,
   HbUploadMode,
@@ -79,6 +85,7 @@ const components = [
   HbSelect,
   HbSlider,
   HbTextarea,
+  HbThemeButton,
   HbTransfer,
   HbUpload,
 ] as const

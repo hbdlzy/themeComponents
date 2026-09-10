@@ -16,7 +16,7 @@ import '@hebang/components/style' // 组件库样式
 createApp(App).use(ElementPlus).use(HbComponents).mount('#app')
 ```
 
-按需引入具名导出即可：`import { HbButton, HbInput, HbSelect } from '@hebang/components'`。
+按需引入具名导出即可：`import { HbButton, HbThemeButton, HbInput, HbSelect } from '@hebang/components'`。
 
 设计还原 / AI 匹配用的组件目录：[`catalog.json`](./catalog.json)。新增组件时追加一条即可，不必改 Skill。
 
@@ -37,6 +37,12 @@ createApp(App).use(ElementPlus).use(HbComponents).mount('#app')
 | `HbDatePicker` | `ElDatePicker` / `ElTimePicker` | 日期/时间；选中格 brand_press+白字 |
 | `HbUpload` | `ElUpload` | 按钮 108×32 / 拖拽 400×200；进度 brand，失败 danger |
 | `HbTransfer` | `ElTransfer` | 穿梭 240×320；悬停 brand_hover+白字，按下 brand_press+白字 |
+
+## 独立自定义组件（不包装 EP）
+
+| 组件 | 说明 | 文档 |
+| --- | --- | --- |
+| `HbThemeButton` | 原生 button 实现的合邦主题按钮：5 类型（主要/次要实线/次要虚线/中性实线/中性虚线）× 3 尺寸 × 圆角形态 × 默认/悬停/点击/置灰四态，颜色全部取 `--hb-el-*` token | [docs/components/hb-theme-button.md](../../docs/components/hb-theme-button.md) |
 
 ## 新增组件约定
 

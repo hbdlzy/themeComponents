@@ -1,5 +1,5 @@
 import { computed, ref, watch } from 'vue'
-import { HB_DEFAULT_BRAND_HEX, type HbColorMode } from '@hebang/tokens'
+import { buildHbPalette, HB_DEFAULT_BRAND_HEX, type HbColorMode } from '@hebang/tokens'
 import { applyTheme, buildThemeVars } from '@hebang/theme'
 
 export const THEME_STORAGE_KEY = 'hb-theme'
@@ -13,6 +13,8 @@ export const presets = [
   '#EF4444',
   '#22C55E',
 ]
+
+export const themePresets = presets
 
 function isHex(value: unknown): value is string {
   return typeof value === 'string' && /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(value)
@@ -41,6 +43,10 @@ const currentHex = computed(
   () => preview.value ?? committed.value ?? HB_DEFAULT_BRAND_HEX,
 )
 
+const palette = computed(() =>
+  buildHbPalette(currentHex.value, { mode: mode.value }),
+)
+
 function persist(): void {
   localStorage.setItem(
     THEME_STORAGE_KEY,
@@ -48,7 +54,7 @@ function persist(): void {
   )
 }
 
-function applyCurrent(): void {
+export function applyCurrent(): void {
   document.documentElement.classList.toggle('dark', mode.value === 'dark')
   applyTheme(buildThemeVars(currentHex.value, { mode: mode.value }))
 }
@@ -68,10 +74,14 @@ watch(mode, () => {
   applyCurrent()
 })
 
-function onActiveChange(color: string | null): void {
+export function onActiveChange(color: string | null): void {
   if (!color) return
   preview.value = color
   applyCurrent()
+}
+
+export function commitColor(hex: string | null): void {
+  committed.value = hex && isHex(hex) ? hex : HB_DEFAULT_BRAND_HEX
 }
 
 let booted = false
@@ -87,7 +97,11 @@ export function useTheme() {
     preview,
     mode,
     currentHex,
+    palette,
     presets,
+    themePresets,
     onActiveChange,
+    commitColor,
+    applyCurrent,
   }
 }

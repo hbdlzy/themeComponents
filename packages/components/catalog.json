@@ -596,6 +596,45 @@
         "titles": ["源列表", "目标列表"],
         "filterable": true
       }
+    },
+    {
+      "name": "HbThemeButton",
+      "file": "src/components/HbThemeButton/HbThemeButton.vue",
+      "match": ["主题按钮", "ThemeButton", "合邦按钮", "主要按钮", "次要实线", "次要虚线", "中性按钮"],
+      "antiMatch": ["ElButton 封装", "文字链", "开关"],
+      "summary": "原生 button 主题按钮：5 类型 × 3 尺寸 × 圆角；颜色全部取 --hb-el-*，不包装 ElButton",
+      "props": {
+        "variant": ["primary", "secondary", "secondary-dashed", "neutral", "neutral-dashed"],
+        "size": ["large", "medium", "small"],
+        "shape": ["default", "round"],
+        "disabled": "boolean"
+      },
+      "slots": ["default", "icon"],
+      "colorRoles": {
+        "主要默认": "背景/边框 --hb-el-brand；文字 --hb-el-white",
+        "主要悬停/点击": "--hb-el-brand_hover / --hb-el-brand_press",
+        "次要": "文字/边框 --hb-el-brand（虚线仅线型不同）",
+        "中性实线": "文字 --hb-el-text；边框 --hb-el-border",
+        "中性虚线边框": "--hb-el-border2",
+        "置灰": "--hb-el-disabled"
+      },
+      "sizeScale": {
+        "size=small": "高 24px / 字 12px / 边距 8px（buttonSizes.small）",
+        "size=medium": "高 32px / 字 14px / 边距 16px",
+        "size=large": "高 40px / 字 16px / 边距 24px"
+      },
+      "sizeVars": {
+        "--hb-btn-height": "覆盖高度",
+        "--hb-btn-font-size": "覆盖字号",
+        "--hb-btn-padding-x": "覆盖左右内边距",
+        "--hb-btn-radius": "覆盖圆角",
+        "--hb-btn-gap": "覆盖图标间距"
+      },
+      "defaults": {
+        "variant": "primary",
+        "size": "medium",
+        "shape": "default"
+      }
     }
   ]
 }

@@ -10,8 +10,15 @@
 | --- | --- |
 | [`@hebang/tokens`](packages/tokens) | 设计令牌单一数据源，产出 JS 对象（ESM/CJS）+ SCSS 变量 |
 | [`@hebang/theme`](packages/theme) | Element Plus 主题适配：CSS 变量覆盖产物 `dist/index.css` + SCSS 源码 `dist/scss/*` |
-| [`@hebang/components`](packages/components) | Vue 3 二次封装组件（HbButton、HbDialog …），ESM/CJS + 类型 + CSS |
-| `playground` | 本地调试用演示应用（不发布） |
+| [`@hebang/components`](packages/components) | Vue 3 二次封装组件（HbButton、HbDialog …）+ 独立自定义组件（HbThemeButton），ESM/CJS + 类型 + CSS |
+| `playground` | 本地调试用演示应用（不发布）：`#/demo` 组件 Demo、`#/tokens` 规则引擎总览、`#/button-demo` 按钮组件 Demo |
+
+## 公共组件文档
+
+组件相互独立，各自的使用方法（Props、颜色配置、示例）统一定义在
+[`docs/components/`](docs/components) 下：
+
+- [HbThemeButton 按钮](docs/components/hb-theme-button.md)
 
 ## 常用命令
 

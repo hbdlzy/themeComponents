@@ -3,22 +3,25 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import ThemeBar from './ThemeBar.vue'
 import ComponentsDemo from './views/ComponentsDemo.vue'
 import TokensPlayground from './views/TokensPlayground.vue'
+import ButtonDemoView from './views/ButtonDemoView.vue'
 import { useTheme } from './useTheme'
 
 useTheme()
 
-type Page = 'demo' | 'tokens'
+type Page = 'demo' | 'tokens' | 'button'
 
 function readPage(): Page {
   const hash = location.hash.replace(/^#\/?/, '')
-  return hash === 'tokens' ? 'tokens' : 'demo'
+  if (hash === 'tokens' || hash === 'theme-rules') return 'tokens'
+  if (hash === 'button' || hash === 'button-demo') return 'button'
+  return 'demo'
 }
 
 const page = ref<Page>(readPage())
 
 function go(next: Page): void {
   page.value = next
-  location.hash = next
+  location.hash = next === 'button' ? 'button-demo' : next
 }
 
 function onHashChange(): void {
@@ -45,11 +48,15 @@ onUnmounted(() => {
         <button type="button" :class="{ 'is-active': page === 'tokens' }" @click="go('tokens')">
           规则引擎
         </button>
+        <button type="button" :class="{ 'is-active': page === 'button' }" @click="go('button')">
+          按钮组件
+        </button>
       </nav>
       <ThemeBar />
     </header>
     <ComponentsDemo v-if="page === 'demo'" />
-    <TokensPlayground v-else />
+    <TokensPlayground v-else-if="page === 'tokens'" />
+    <ButtonDemoView v-else />
   </div>
 </template>
 

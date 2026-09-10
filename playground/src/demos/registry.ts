@@ -10,12 +10,14 @@ import HbRadioDemo from './HbRadioDemo.vue'
 import HbSelectDemo from './HbSelectDemo.vue'
 import HbSliderDemo from './HbSliderDemo.vue'
 import HbTextareaDemo from './HbTextareaDemo.vue'
+import HbThemeButtonDemo from './HbThemeButtonDemo.vue'
 import HbTransferDemo from './HbTransferDemo.vue'
 import HbUploadDemo from './HbUploadDemo.vue'
 
 /** 新增组件演示：在此登记 HbXxx → Demo，ComponentsDemo 会按 catalog 顺序出 tab */
 export const componentDemos: Record<string, Component> = {
   HbButton: HbButtonDemo,
+  HbThemeButton: HbThemeButtonDemo,
   HbCard: HbCardDemo,
   HbCheckbox: HbCheckboxDemo,
   HbDatePicker: HbDatePickerDemo,
