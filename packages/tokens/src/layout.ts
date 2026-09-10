@@ -53,6 +53,18 @@ export const componentSizes = {
   heightLarge: '40px',
 } as const
 
+/**
+ * 按钮尺寸规格（HbThemeButton 大中小）——唯一数据源，改尺寸只动这里。
+ * 列：height 按钮高度 / fontSize 文字大小 / paddingX 左右内边距 /
+ * radius 小圆角 / gap 图标与文字间距（设计稿未列，组件经验值）。
+ */
+export const buttonSizes = {
+  small: { height: '24px', fontSize: '12px', paddingX: '8px', radius: radii.base, gap: '4px' },
+  medium: { height: '32px', fontSize: '14px', paddingX: '16px', radius: radii.base, gap: '6px' },
+  large: { height: '40px', fontSize: '16px', paddingX: '24px', radius: radii.base, gap: '8px' },
+} as const
+
 export type Spacing = typeof spacing
 export type Radii = typeof radii
 export type FontSizes = typeof fontSizes
+export type ButtonSizes = typeof buttonSizes

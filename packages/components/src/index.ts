@@ -3,12 +3,21 @@ import type { App } from 'vue'
 import './styles/index.scss'
 
 import HbButton from './components/HbButton/HbButton.vue'
+import HbThemeButton from './components/HbThemeButton/HbThemeButton.vue'
 import HbDialog from './components/HbDialog/HbDialog.vue'
 
-export { HbButton, HbDialog }
-export type { HbButtonProps, HbButtonType, HbDialogProps } from './types'
+export { HbButton, HbThemeButton, HbDialog }
+export type {
+  HbButtonProps,
+  HbButtonType,
+  HbDialogProps,
+  HbThemeButtonProps,
+  HbThemeButtonVariant,
+  HbThemeButtonSize,
+  HbThemeButtonShape,
+} from './types'
 
-const components = [HbButton, HbDialog] as const
+const components = [HbButton, HbThemeButton, HbDialog] as const
 
 /** 全量注册：app.use(HbComponents) */
 export function install(app: App): void {
