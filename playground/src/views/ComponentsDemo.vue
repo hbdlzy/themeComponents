@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import catalog from '../../../packages/components/catalog.json'
-import { componentDemos } from '../demos/registry'
+import { componentDemos, extraDemoNames } from '../demos/registry'
 
 /** 按钮矩阵贴在页顶，和 HbButton 的状态展示放一起 */
 const pinFirst = ['HbButton', 'HbThemeButton']
+const extraNameSet = new Set<string>(extraDemoNames)
 
 const sections = computed(() => {
-  const items = catalog.components.map((item) => ({
-    name: item.name,
-    demo: componentDemos[item.name],
-  }))
+  const items = catalog.components
+    .filter((item) => !extraNameSet.has(item.name))
+    .map((item) => ({
+      name: item.name,
+      demo: componentDemos[item.name],
+    }))
   const pinned = pinFirst
     .map((name) => items.find((item) => item.name === name))
     .filter((item): item is (typeof items)[number] => Boolean(item))

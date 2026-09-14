@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated": "2026-09-10",
+  "updated": "2026-09-11",
   "meta": {
     "purpose": "给 AI / 开发者做「读设计稿 → 匹配现有组件」的唯一清单。新增组件只往 components 数组追加一条，不要改 Skill。每条 usage 是最短可运行模板：从 @hebang/ui 具名导入，并 import '@hebang/ui/style'；值一律 v-model。",
     "colorPolicy": {
@@ -649,6 +649,461 @@
         "variant": "primary",
         "size": "medium",
         "shape": "default"
+      }
+    },
+    {
+      "name": "HbMessage",
+      "file": "src/components/HbMessage/HbMessage.vue",
+      "match": ["提示框", "系统提示", "Alert", "全局提示", "Message"],
+      "antiMatch": ["通知卡片 Notification", "气泡 Tooltip", "对话框"],
+      "summary": "系统提示浅底描边 Alert；全局提示用 hbMessage() 白底 3 秒关闭",
+      "usage": "<HbMessage type=\"success\" title=\"成功\" description=\"已保存\" />\n脚本：hbMessage.success('保存成功')",
+      "props": {
+        "type": ["success", "warning", "error", "info"],
+        "title": "string",
+        "description": "string",
+        "closable": "boolean"
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "系统成功": "底 --hb-el-success_light，描边 --hb-el-success",
+        "系统警告": "底 --hb-el-warning_light，描边 --hb-el-warning",
+        "系统错误": "底 --hb-el-danger_light，描边 --hb-el-danger",
+        "系统信息": "底 --hb-el-brand_light，描边 --hb-el-brand",
+        "全局提示底": "--hb-el-bg，描边 --hb-el-border，字 --hb-el-text"
+      },
+      "sizeScale": {},
+      "sizeVars": {},
+      "defaults": {
+        "type": "success",
+        "closable": true
+      }
+    },
+    {
+      "name": "HbTooltip",
+      "file": "src/components/HbTooltip/HbTooltip.vue",
+      "match": ["气泡", "气泡提示", "Tooltip", "气泡框"],
+      "antiMatch": ["提示框 Message", "通知 Notification", "下拉面板"],
+      "summary": "气泡提示：浅色底/字/边，深色遮罩底白字",
+      "usage": "<HbTooltip content=\"说明\" effect=\"dark\">触发器</HbTooltip>",
+      "props": {
+        "content": "string",
+        "effect": ["light", "dark"],
+        "placement": ["top", "bottom", "left", "right"]
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "浅色": "底 --hb-el-bg，字 --hb-el-text，边 --hb-el-border",
+        "深色": "底 --hb-el-mask，字 --hb-el-white"
+      },
+      "sizeScale": {},
+      "sizeVars": {},
+      "defaults": {
+        "effect": "dark",
+        "placement": "top"
+      }
+    },
+    {
+      "name": "HbNotification",
+      "file": "src/components/HbNotification/HbNotification.vue",
+      "match": ["通知卡片", "通知", "Notification"],
+      "antiMatch": ["全局提示 Message", "系统提示 Alert", "气泡"],
+      "summary": "360px 通知卡片；浮层用 hbNotify()，5 秒关闭",
+      "usage": "<HbNotification title=\"标题\" message=\"内容\" />\n脚本：hbNotify.success('标题', '内容')",
+      "props": {
+        "title": "string",
+        "message": "string",
+        "type": ["success", "warning", "error", "info"],
+        "closable": "boolean"
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "卡片底": "--hb-el-bg",
+        "标题": "--hb-el-text",
+        "正文": "--hb-el-text2",
+        "描边": "--hb-el-border2"
+      },
+      "sizeScale": {
+        "width": "360px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "type": "info",
+        "closable": true
+      }
+    },
+    {
+      "name": "HbLoading",
+      "file": "src/components/HbLoading/HbLoading.vue",
+      "match": ["加载", "加载指示器", "Loading", "骨架屏", "进度条"],
+      "antiMatch": ["按钮 loading", "上传进度 Upload"],
+      "summary": "加载指示器：转圈 / 环形 / 进度条 / 骨架屏",
+      "usage": "<HbLoading mode=\"spinner\" text=\"加载中\" />",
+      "props": {
+        "mode": ["spinner", "circle", "progress", "skeleton"],
+        "percentage": "number",
+        "text": "string",
+        "title": "string"
+      },
+      "slots": [],
+      "colorRoles": {
+        "转圈描边": "--hb-el-border，顶部 --hb-el-brand",
+        "进度填充": "--hb-el-brand",
+        "进度轨道": "--hb-el-bg4",
+        "文案": "--hb-el-text2"
+      },
+      "sizeScale": {
+        "spinner": "32px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "mode": "spinner"
+      }
+    },
+    {
+      "name": "HbMenu",
+      "file": "src/components/HbMenu/HbMenu.vue",
+      "match": ["导航栏", "顶部导航", "左侧导航", "菜单", "Menu", "侧栏"],
+      "antiMatch": ["面包屑", "页码", "Tabs"],
+      "summary": "顶部导航 72px + 左侧导航 216px；一级选中品牌底白字，二级浅底品牌字",
+      "usage": "<HbMenu v-model=\"active\" mode=\"vertical\" :items=\"items\" />",
+      "props": {
+        "mode": ["horizontal", "vertical"],
+        "modelValue": "string",
+        "items": "HbMenuItem[]",
+        "collapse": "boolean"
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "默认字": "--hb-el-text",
+        "悬停字": "--hb-el-brand",
+        "一级选中": "底 --hb-el-brand，字 --hb-el-white",
+        "二级选中": "底 --hb-el-brand_light，字 --hb-el-brand"
+      },
+      "sizeScale": {
+        "horizontal": "高 72px",
+        "vertical": "宽 216px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "mode": "vertical"
+      }
+    },
+    {
+      "name": "HbBreadcrumb",
+      "file": "src/components/HbBreadcrumb/HbBreadcrumb.vue",
+      "match": ["面包屑", "Breadcrumb", "路径导航"],
+      "antiMatch": ["菜单 Menu", "Tabs", "步骤条"],
+      "summary": "面包屑路径，分隔符 > ，末项次要文字",
+      "usage": "<HbBreadcrumb :items=\"[{ label: '首页' }, { label: '当前页' }]\" />",
+      "props": {
+        "items": "HbBreadcrumbItem[]"
+      },
+      "slots": [],
+      "colorRoles": {
+        "默认字": "--hb-el-text",
+        "末项": "--hb-el-text2",
+        "分隔符": "--hb-el-border2"
+      },
+      "sizeScale": {
+        "lineHeight": "32px",
+        "font": "14px"
+      },
+      "sizeVars": {},
+      "defaults": {}
+    },
+    {
+      "name": "HbPagination",
+      "file": "src/components/HbPagination/HbPagination.vue",
+      "match": ["页码", "分页", "Pagination"],
+      "antiMatch": ["步骤条", "Tabs"],
+      "summary": "分页：总数、尺寸、页码、跳转；当前页品牌底白字",
+      "usage": "<HbPagination v-model:current-page=\"page\" v-model:page-size=\"size\" :total=\"100\" />",
+      "props": {
+        "currentPage": "number",
+        "pageSize": "number",
+        "total": "number",
+        "pageSizes": "number[]",
+        "disabled": "boolean"
+      },
+      "slots": [],
+      "colorRoles": {
+        "默认": "底 --hb-el-bg，边 --hb-el-border2，字 --hb-el-text",
+        "当前页": "底/边 --hb-el-brand，字 --hb-el-white",
+        "悬停边": "--hb-el-brand_hover",
+        "禁用": "底 --hb-el-bg3，字 --hb-el-disabled"
+      },
+      "sizeScale": {
+        "pager": "24×24px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "currentPage": 1,
+        "pageSize": 10
+      }
+    },
+    {
+      "name": "HbSteps",
+      "file": "src/components/HbSteps/HbSteps.vue",
+      "match": ["步骤条", "Steps", "流程导航"],
+      "antiMatch": ["页码", "时间轴", "Tabs"],
+      "summary": "流程步骤：当前品牌色，未完成四级背景",
+      "usage": "<HbSteps :active=\"1\" :items=\"[{ title: '填写' }, { title: '完成' }]\" />",
+      "props": {
+        "active": "number",
+        "items": "HbStepItem[]",
+        "direction": ["horizontal", "vertical"]
+      },
+      "slots": [],
+      "colorRoles": {
+        "当前": "--hb-el-brand",
+        "完成": "--hb-el-brand",
+        "未完成": "--hb-el-bg4",
+        "标题": "--hb-el-text",
+        "描述": "--hb-el-text2"
+      },
+      "sizeScale": {
+        "node": "24px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "active": 0,
+        "direction": "horizontal"
+      }
+    },
+    {
+      "name": "HbCollapse",
+      "file": "src/components/HbCollapse/HbCollapse.vue",
+      "match": ["折叠面板", "Collapse", "手风琴"],
+      "antiMatch": ["菜单折叠", "卡片"],
+      "summary": "折叠面板，标题栏大/中/小 56/48/40，悬停浅品牌底",
+      "usage": "<HbCollapse v-model=\"opened\" :items=\"[{ name: 'a', title: '标题' }]\" />",
+      "props": {
+        "modelValue": "string | string[]",
+        "items": "HbCollapseItem[]",
+        "accordion": "boolean",
+        "size": ["large", "medium", "small"]
+      },
+      "slots": ["default", "[item.name]"],
+      "colorRoles": {
+        "标题栏底": "--hb-el-bg2",
+        "标题字": "--hb-el-text",
+        "悬停底": "--hb-el-brand_light",
+        "内容字": "--hb-el-text2",
+        "内容底": "--hb-el-bg",
+        "分割线": "--hb-el-divider",
+        "禁用": "--hb-el-disabled"
+      },
+      "sizeScale": {
+        "size=large": "标题栏 56px",
+        "size=medium": "标题栏 48px",
+        "size=small": "标题栏 40px"
+      },
+      "sizeVars": {
+        "--hb-collapse-header-height": "覆盖标题栏高度"
+      },
+      "defaults": {
+        "size": "medium",
+        "accordion": false
+      }
+    },
+    {
+      "name": "HbTable",
+      "file": "src/components/HbTable/HbTable.vue",
+      "match": ["表格", "数据表格", "Table"],
+      "antiMatch": ["描述列表", "树形", "穿梭框"],
+      "summary": "数据表格：紧凑 40 / 宽松 56，表头二级底，斑马二级底，悬停三级底",
+      "usage": "<HbTable :columns=\"[{ prop: 'name', label: '名称' }]\" :data=\"rows\" />",
+      "props": {
+        "data": "Record<string, unknown>[]",
+        "columns": "HbTableColumn[]",
+        "stripe": "boolean",
+        "border": "boolean",
+        "size": ["compact", "loose"]
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "表头底": "--hb-el-bg2",
+        "表头字": "--hb-el-text",
+        "单元格底": "--hb-el-bg",
+        "斑马": "--hb-el-bg2",
+        "悬停": "--hb-el-bg3",
+        "网格": "--hb-el-border",
+        "空字段": "--hb-el-text3"
+      },
+      "sizeScale": {
+        "size=compact": "行高 40px",
+        "size=loose": "行高 56px"
+      },
+      "sizeVars": {
+        "--hb-table-row-height": "覆盖行高"
+      },
+      "defaults": {
+        "stripe": true,
+        "size": "compact"
+      }
+    },
+    {
+      "name": "HbTimeline",
+      "file": "src/components/HbTimeline/HbTimeline.vue",
+      "match": ["时间轴", "Timeline", "流转记录"],
+      "antiMatch": ["步骤条", "树形"],
+      "summary": "时间轴：轴线次要边框，节点可主题/成功/警告/失败",
+      "usage": "<HbTimeline :items=\"[{ timestamp: '09:12', content: '创建', type: 'primary' }]\" />",
+      "props": {
+        "items": "HbTimelineItem[]"
+      },
+      "slots": ["default", "[index]"],
+      "colorRoles": {
+        "名称": "--hb-el-text",
+        "时间": "--hb-el-text2",
+        "轴线/默认节点": "--hb-el-border2",
+        "主题节点": "--hb-el-brand",
+        "成功节点": "--hb-el-success",
+        "警告节点": "--hb-el-warning",
+        "失败节点": "--hb-el-danger"
+      },
+      "sizeScale": {},
+      "sizeVars": {},
+      "defaults": {}
+    },
+    {
+      "name": "HbTree",
+      "file": "src/components/HbTree/HbTree.vue",
+      "match": ["树", "树形", "Tree", "组织树"],
+      "antiMatch": ["菜单 Menu", "折叠面板", "表格"],
+      "summary": "树形：悬停浅品牌底，选中品牌字，禁用 disabled",
+      "usage": "<HbTree :data=\"[{ label: '根', children: [{ label: '子' }] }]\" />",
+      "props": {
+        "data": "HbTreeNode[]",
+        "defaultExpandAll": "boolean"
+      },
+      "slots": [],
+      "colorRoles": {
+        "节点字": "--hb-el-text",
+        "展开图标": "--hb-el-text2",
+        "悬停字": "--hb-el-brand_hover",
+        "悬停底": "--hb-el-brand_light",
+        "选中字": "--hb-el-brand",
+        "禁用": "--hb-el-disabled"
+      },
+      "sizeScale": {
+        "font": "14px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "defaultExpandAll": true
+      }
+    },
+    {
+      "name": "HbTag",
+      "file": "src/components/HbTag/HbTag.vue",
+      "match": ["标签", "Tag", "状态标签"],
+      "antiMatch": ["Tabs", "徽标 Badge", "按钮"],
+      "summary": "Tag：线型 / 浅底 / 填充 × 中性成功告警危险信息",
+      "usage": "<HbTag variant=\"outlined\" status=\"success\">成功</HbTag>",
+      "props": {
+        "variant": ["outlined", "light", "solid"],
+        "status": ["neutral", "success", "warning", "danger", "info"],
+        "closable": "boolean"
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "线型中性": "描边/字 --hb-el-text3",
+        "线型成功": "描边/字 --hb-el-success",
+        "浅底成功": "底 --hb-el-success_light，字 --hb-el-success",
+        "填充成功": "底 --hb-el-success，字 --hb-el-white",
+        "信息": "--hb-el-brand 系列"
+      },
+      "sizeScale": {
+        "height": "24px",
+        "font": "12px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "variant": "outlined",
+        "status": "neutral"
+      }
+    },
+    {
+      "name": "HbTabs",
+      "file": "src/components/HbTabs/HbTabs.vue",
+      "match": ["Tabs", "页签", "选项卡", "标签页"],
+      "antiMatch": ["Tag 标签", "菜单", "步骤条"],
+      "summary": "页签：选中品牌字+下划线，分割线 divider",
+      "usage": "<HbTabs v-model=\"active\" :items=\"[{ name: 'a', label: '基础' }]\" />",
+      "props": {
+        "modelValue": "string",
+        "items": "HbTabItem[]"
+      },
+      "slots": ["default", "[item.name]"],
+      "colorRoles": {
+        "默认": "--hb-el-text",
+        "悬停": "--hb-el-brand_hover",
+        "选中/下划线": "--hb-el-brand",
+        "禁用": "--hb-el-disabled",
+        "分割线": "--hb-el-divider"
+      },
+      "sizeScale": {
+        "font": "14px"
+      },
+      "sizeVars": {},
+      "defaults": {}
+    },
+    {
+      "name": "HbBadge",
+      "file": "src/components/HbBadge/HbBadge.vue",
+      "match": ["徽标", "Badge", "角标", "未读数"],
+      "antiMatch": ["Tag", "按钮"],
+      "summary": "徽标：圆点 10px / 数字 14px，超过 99 显示 99+，文字白",
+      "usage": "<HbBadge :value=\"8\" type=\"danger\">内容</HbBadge>",
+      "props": {
+        "value": "string | number",
+        "max": "number",
+        "type": ["primary", "success", "warning", "danger"],
+        "hidden": "boolean"
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "文字": "--hb-el-white",
+        "默认底": "--hb-el-brand",
+        "成功底": "--hb-el-success",
+        "警告底": "--hb-el-warning",
+        "危险底": "--hb-el-danger"
+      },
+      "sizeScale": {
+        "dot": "10×10px",
+        "number": "14×14px"
+      },
+      "sizeVars": {},
+      "defaults": {
+        "max": 99,
+        "type": "primary"
+      }
+    },
+    {
+      "name": "HbEmpty",
+      "file": "src/components/HbEmpty/HbEmpty.vue",
+      "match": ["缺省图", "空状态", "Empty", "暂无数据", "暂无网络"],
+      "antiMatch": ["加载 Loading", "骨架屏"],
+      "summary": "空状态 10 种：数据/内容/消息/地址/搜索/记录/收藏/认证/网络/建设中",
+      "usage": "<HbEmpty kind=\"data\" />",
+      "props": {
+        "kind": ["data", "content", "message", "address", "search", "record", "favorite", "auth", "network", "building"],
+        "description": "string"
+      },
+      "slots": ["default"],
+      "colorRoles": {
+        "插画边": "--hb-el-border2",
+        "插画底": "--hb-el-bg2",
+        "强调": "--hb-el-brand",
+        "标题": "--hb-el-text",
+        "说明": "--hb-el-text2"
+      },
+      "sizeScale": {},
+      "sizeVars": {},
+      "defaults": {
+        "kind": "data"
       }
     }
   ]

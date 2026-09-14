@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import catalog from '../../../packages/components/catalog.json'
+import TokenColorTable from '../components/TokenColorTable.vue'
 import { componentDemos, formDemoNames } from '../demos/registry'
+import { formColorGroups } from '../formColorGroups'
 
 const FORM_TAB_KEY = 'hb-form-demo-tab'
 const formNameSet = new Set<string>(formDemoNames)
@@ -28,6 +30,7 @@ function readStoredTab(): string {
 }
 
 const active = ref(readStoredTab())
+const activeColorGroups = computed(() => formColorGroups[active.value] ?? [])
 
 watch(active, (name) => {
   if (!name) return
@@ -48,6 +51,7 @@ watch(active, (name) => {
         <p class="tab-summary">{{ tab.summary }}</p>
         <component :is="tab.demo" v-if="tab.demo" />
         <p v-else class="muted">暂无演示。新增 <code>playground/src/demos/{{ tab.name }}Demo.vue</code> 并登记到 registry。</p>
+        <TokenColorTable v-if="tab.name === active && activeColorGroups.length" :groups="activeColorGroups" />
       </el-tab-pane>
     </el-tabs>
   </main>

@@ -226,3 +226,181 @@ export interface HbTransferProps {
   filterable?: boolean
   disabled?: boolean
 }
+
+export type HbStatusType = 'success' | 'warning' | 'error' | 'info'
+
+export interface HbMessageProps {
+  type?: HbStatusType
+  title?: string
+  closable?: boolean
+  /** 系统提示：浅底描边；全局提示走 hbMessage() */
+  description?: string
+}
+
+export type HbTooltipEffect = 'light' | 'dark'
+
+export interface HbTooltipProps {
+  content?: string
+  effect?: HbTooltipEffect
+  placement?: 'top' | 'bottom' | 'left' | 'right'
+}
+
+export interface HbNotificationProps {
+  title?: string
+  message?: string
+  type?: HbStatusType
+  closable?: boolean
+}
+
+export type HbLoadingMode = 'spinner' | 'circle' | 'progress' | 'skeleton'
+
+export interface HbLoadingProps {
+  mode?: HbLoadingMode
+  percentage?: number
+  text?: string
+  title?: string
+}
+
+export interface HbMenuItem {
+  index: string
+  label: string
+  disabled?: boolean
+  children?: HbMenuItem[]
+}
+
+export interface HbMenuProps {
+  mode?: 'horizontal' | 'vertical'
+  modelValue?: string
+  items?: HbMenuItem[]
+  collapse?: boolean
+}
+
+export interface HbBreadcrumbItem {
+  label: string
+  to?: string
+}
+
+export interface HbBreadcrumbProps {
+  items?: HbBreadcrumbItem[]
+}
+
+export interface HbPaginationProps {
+  currentPage?: number
+  pageSize?: number
+  total?: number
+  pageSizes?: number[]
+  disabled?: boolean
+}
+
+export interface HbStepItem {
+  title: string
+  description?: string
+}
+
+export interface HbStepsProps {
+  active?: number
+  items?: HbStepItem[]
+  direction?: 'horizontal' | 'vertical'
+}
+
+export type HbCollapseSize = 'large' | 'medium' | 'small'
+
+export interface HbCollapseItem {
+  name: string
+  title: string
+  disabled?: boolean
+}
+
+export interface HbCollapseProps {
+  modelValue?: string | string[]
+  items?: HbCollapseItem[]
+  accordion?: boolean
+  size?: HbCollapseSize
+}
+
+export interface HbTableColumn {
+  prop: string
+  label: string
+  width?: string | number
+}
+
+export type HbTableSize = 'compact' | 'loose'
+
+export interface HbTableProps {
+  data?: Record<string, unknown>[]
+  columns?: HbTableColumn[]
+  stripe?: boolean
+  border?: boolean
+  /** compact 行高 40px，loose 行高 56px */
+  size?: HbTableSize
+}
+
+export type HbTimelineStatus = 'default' | 'primary' | 'success' | 'warning' | 'danger'
+
+export interface HbTimelineItem {
+  timestamp?: string
+  content?: string
+  type?: HbTimelineStatus
+}
+
+export interface HbTimelineProps {
+  items?: HbTimelineItem[]
+}
+
+export interface HbTreeNode {
+  id?: string
+  label: string
+  disabled?: boolean
+  children?: HbTreeNode[]
+}
+
+export interface HbTreeProps {
+  data?: HbTreeNode[]
+  defaultExpandAll?: boolean
+}
+
+export type HbTagVariant = 'outlined' | 'light' | 'solid'
+export type HbTagStatus = 'neutral' | 'success' | 'warning' | 'danger' | 'info'
+
+export interface HbTagProps {
+  variant?: HbTagVariant
+  status?: HbTagStatus
+  closable?: boolean
+}
+
+export interface HbTabItem {
+  name: string
+  label: string
+  disabled?: boolean
+}
+
+export interface HbTabsProps {
+  modelValue?: string
+  items?: HbTabItem[]
+}
+
+export type HbBadgeType = 'primary' | 'success' | 'warning' | 'danger'
+
+export interface HbBadgeProps {
+  value?: string | number
+  max?: number
+  type?: HbBadgeType
+  hidden?: boolean
+}
+
+export type HbEmptyKind =
+  | 'data'
+  | 'content'
+  | 'message'
+  | 'address'
+  | 'search'
+  | 'record'
+  | 'favorite'
+  | 'auth'
+  | 'network'
+  | 'building'
+
+export interface HbEmptyProps {
+  kind?: HbEmptyKind
+  description?: string
+}
